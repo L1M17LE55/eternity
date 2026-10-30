@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/google-apps-script": "^2.0.14",
+    "eslint": "^10.14.0",
+    "eslint-plugin-googleappsscript": "^1.0.5"
+  }
+}
