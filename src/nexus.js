@@ -1,8 +1,29 @@
+const CACHE_KEY = 'APP_BUNDLE'
+
+const cache = () => CacheService.getScriptCache()
 const props = () => PropertiesService.getScriptProperties()
-const { engine, viewport } = new Function(fetchBundle_())()
+const { engine, viewport } = new Function(getBundle_())()
 
 function bootstrapApp() {
+  clearStaleCache_()
   viewport.showSidebar()
+}
+
+function clearStaleCache_() {
+  if (!props().getProperty('NEXUS')) {
+    cache().remove(CACHE_KEY)
+  }
+}
+
+function getBundle_() {
+  const cachedBundle = cache().get(CACHE_KEY)
+  if (cachedBundle) {
+    return cachedBundle
+  }
+
+  const fetchedBundle = fetchBundle_()
+  cache().put(CACHE_KEY, fetchedBundle, 21600)
+  return fetchedBundle
 }
 
 function fetchBundle_() {
