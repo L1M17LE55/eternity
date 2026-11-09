@@ -82,6 +82,9 @@ var App = (() => {
 \r
 <body>\r
   <div id="method-data" data-payload="<?= payload ?>"></div>\r
+\r
+  <p id="result">Loading...</p>\r
+  \r
   <script>\r
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)\r
 \r
