@@ -3,7 +3,13 @@
     "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/google-apps-script": "^2.0.14",
+    "esbuild": "^0.28.2",
     "eslint": "^10.14.0",
-    "eslint-plugin-googleappsscript": "^1.0.5"
+    "eslint-plugin-googleappsscript": "^1.0.5",
+    "eslint-plugin-html": "^8.2.1",
+    "globals": "^17.14.0"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs"
   }
 }

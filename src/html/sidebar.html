@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+</head>
+
+<body>
+  <button onclick="sayHello()">Hello</button>
+  <script>
+    function sayHello() {
+      google.script.run
+        .withSuccessHandler((result) => {
+          console.log('SUCCESS:', result)
+        })
+        .withFailureHandler((error) => {
+          console.error('FAILURE:', error)
+        })
+        .invoke('showModal', 'helloFromEngine')
+    }
+  </script>
+</body>
+
+</html>
