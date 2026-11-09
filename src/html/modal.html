@@ -9,6 +9,9 @@
 
 <body>
   <div id="method-data" data-payload="<?= payload ?>"></div>
+
+  <p id="result">Loading...</p>
+  
   <script>
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
 
