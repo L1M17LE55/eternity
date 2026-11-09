@@ -3,27 +3,26 @@ const CACHE_KEY = 'APP_BUNDLE'
 const cache = () => CacheService.getScriptCache()
 const props = () => PropertiesService.getScriptProperties()
 
-let engine
-let viewport
+let appInstance
 
-function bootstrapApp() {
-  clearStaleCache_()
-  initApp_()
-  viewport.showSidebar()
+const app = () => {
+  if (!appInstance) {
+    appInstance = new Function(getBundle_())()
+  }
+  return appInstance
 }
 
-function clearStaleCache_() {
+function bootstrapApp() {
+  clearAppCache_()
+  app().viewport.showSidebar()
+}
+
+function clearAppCache_() {
   if (props().getProperty('NEXUS_PURGED') === 'true') {
     cache().remove(CACHE_KEY)
     props().deleteProperty('NEXUS_PURGED')
     console.log('App cache cleared.')
   }
-}
-
-function initApp_() {
-  const app = new Function(getBundle_())()
-  engine = app.engine
-  viewport = app.viewport
 }
 
 function getBundle_() {
@@ -53,11 +52,11 @@ function fetchBundle_() {
 }
 
 function showModal(method, ...args) {
-  viewport.showModal(method, ...args)
+  app().viewport.showModal(method, ...args)
 }
 
 function helloFromEngine() {
-  return engine.helloFromEngine()
+  return app().engine.helloFromEngine()
 }
 
 return {
