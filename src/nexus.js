@@ -16,7 +16,7 @@ const app = () => {
 
 function bootstrapApp() {
   clearAppCache_()
-  app().viewport.showSidebar()
+  app().ui.showSidebar()
 }
 
 function clearAppCache_() {
@@ -98,7 +98,7 @@ function purgeNexusAndUpdate_() {
 }
 
 function showModal(method, ...args) {
-  app().viewport.showModal(method, ...args)
+  app().ui.showModal(method, ...args)
 }
 
 function helloFromEngine() {
