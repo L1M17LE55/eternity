@@ -1,4 +1,4 @@
-const NEXUS_VERSION = '1.0.0-alpha.1'
+const NEXUS_VERSION = '1.0.0-alpha.2'
 
 const CACHE_KEY = 'APP_BUNDLE'
 
