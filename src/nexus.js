@@ -1,3 +1,5 @@
+const NEXUS_VERSION = '1.0.0-alpha.1'
+
 const CACHE_KEY = 'APP_BUNDLE'
 
 const cache = () => CacheService.getScriptCache()
@@ -21,19 +23,18 @@ function clearAppCache_() {
   if (props().getProperty('NEXUS_PURGED') === 'true') {
     cache().remove(CACHE_KEY)
     props().deleteProperty('NEXUS_PURGED')
-    console.log('App cache cleared.')
   }
 }
 
 function getBundle_() {
   const cachedBundle = cache().get(CACHE_KEY)
   if (cachedBundle) {
-    console.log('App loaded from cache.')
     return cachedBundle
   }
 
   const fetchedBundle = fetchBundle_()
   cache().put(CACHE_KEY, fetchedBundle, 21600)
+  compareNexusVersions_(fetchedBundle)
   return fetchedBundle
 }
 
@@ -45,10 +46,55 @@ function fetchBundle_() {
         'Authorization': `Bearer ${props().getProperty('TOKEN')}`,
         'Accept': 'application/vnd.github.raw+json',
         'X-GitHub-Api-Version': '2026-03-10'
-      }
+      },
+      muteHttpExceptions: true
     }
   )
+
+  const statusCode = response.getResponseCode()
+
+  if (statusCode === 404) {
+    purgeNexusAndUpdate_()
+    throw new Error('BUNDLE_NOT_FOUND')
+  }
+
+  if (statusCode !== 200) {
+    SpreadsheetApp.getUi().alert(
+      'Something Went Wrong :(',
+      'Please try again',
+      SpreadsheetApp.getUi().ButtonSet.OK
+    )
+    throw new Error(`HTTP_STATUS_${statusCode}`)
+  }
+
   return response.getContentText()
+}
+
+function compareNexusVersions_(bundle) {
+  const bundleNexusVersion = getMetadata_(bundle).nexusVersion
+  if (NEXUS_VERSION !== bundleNexusVersion) {
+    purgeNexusAndUpdate_()
+    throw new Error('NEXUS_UPDATE_REQUIRED')
+  }
+}
+
+function getMetadata_(bundle) {
+  const metadata = bundle.match(/\/\* APP_METADATA\s*([\s\S]*?)\s*\*\//)
+  if (!metadata) {
+    purgeNexusAndUpdate_()
+    throw new Error('METADATA_NOT_FOUND')
+  }
+  return JSON.parse(metadata[1])
+}
+
+function purgeNexusAndUpdate_() {
+  props().deleteProperty('NEXUS')
+  cache().remove('NEXUS')
+  SpreadsheetApp.getUi().alert(
+    'New Version Available',
+    'Please reopen the app',
+    SpreadsheetApp.getUi().ButtonSet.OK
+  )
 }
 
 function showModal(method, ...args) {

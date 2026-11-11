@@ -1,3 +1,9 @@
+/* APP_METADATA
+{
+  "nexusVersion": "1.0.0-alpha.1",
+  "bundleVersion": "1.0.0-alpha.1"
+}
+*/
 var App = (() => {
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
