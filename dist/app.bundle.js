@@ -47,65 +47,65 @@ var App = (() => {
   });
 
   // src/html/sidebar.html
-  var sidebar_default = `<!DOCTYPE html>\r
-<html>\r
-\r
-<head>\r
-  <base target="_top">\r
-  <meta charset="UTF-8">\r
-  <meta name="viewport" content="width=device-width, initial-scale=1">\r
-  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">\r
-</head>\r
-\r
-<body>\r
-  <button onclick="sayHello()">Hello</button>\r
-  <script>\r
-    function sayHello() {\r
-      google.script.run\r
-        .withSuccessHandler((result) => {\r
-          console.log('SUCCESS:', result)\r
-        })\r
-        .withFailureHandler((error) => {\r
-          console.error('FAILURE:', error)\r
-        })\r
-        .invoke('showModal', 'helloFromEngine')\r
-    }\r
-  </script>\r
-</body>\r
-\r
-</html>\r
+  var sidebar_default = `<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+</head>
+
+<body>
+  <button onclick="sayHello()">Hello</button>
+  <script>
+    function sayHello() {
+      google.script.run
+        .withSuccessHandler((result) => {
+          console.log('SUCCESS:', result)
+        })
+        .withFailureHandler((error) => {
+          console.error('FAILURE:', error)
+        })
+        .invoke('showModal', 'helloFromEngine')
+    }
+  </script>
+</body>
+
+</html>
 `;
 
   // src/html/modal.html
-  var modal_default = `<!DOCTYPE html>\r
-<html>\r
-\r
-<head>\r
-  <base target="_top">\r
-  <meta charset="UTF-8">\r
-  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">\r
-</head>\r
-\r
-<body>\r
-  <div id="method-data" data-payload="<?= payload ?>"></div>\r
-\r
-  <p id="result">Loading...</p>\r
-  \r
-  <script>\r
-    const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)\r
-\r
-    google.script.run\r
-      .withSuccessHandler((result) => {\r
-        document.getElementById('result').textContent = result\r
-      })\r
-      .withFailureHandler((error) => {\r
-        document.getElementById('result').textContent = error.message\r
-      })\r
-      .invoke(method, ...args)\r
-  </script>\r
-</body>\r
-\r
-</html>\r
+  var modal_default = `<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+</head>
+
+<body>
+  <div id="method-data" data-payload="<?= payload ?>"></div>
+
+  <p id="result">Loading...</p>
+  
+  <script>
+    const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
+
+    google.script.run
+      .withSuccessHandler((result) => {
+        document.getElementById('result').textContent = result
+      })
+      .withFailureHandler((error) => {
+        document.getElementById('result').textContent = error.message
+      })
+      .invoke(method, ...args)
+  </script>
+</body>
+
+</html>
 `;
 
   // src/viewport.js
