@@ -43,7 +43,7 @@ function fetchBundle_() {
     `https://api.github.com/repos/L1M17LE55/eternity/contents/dist/app.bundle.js?ref=${props().getProperty('BRANCH')}`,
     {
       headers: {
-        // 'Authorization': `Bearer ${props().getProperty('TOKEN')}`,
+        'Authorization': `Bearer ${props().getProperty('TOKEN')}`,
         'Accept': 'application/vnd.github.raw+json',
         'X-GitHub-Api-Version': '2026-03-10'
       },
