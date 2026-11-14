@@ -35,35 +35,35 @@
     <button id="import-progress">Import progress</button>
 
     <script>
-      document
-        .getElementById('update-tracker')
-        .addEventListener('click', updateTracker)
+      const updateButton = document.getElementById('update-tracker')
+      updateButton.addEventListener('click', () => {
+        updateButton.disabled = true
 
-      function updateTracker() {
         google.script.run
-          .withSuccessHandler((result) => {
-            console.log('SUCCESS:', result)
+          .withSuccessHandler(() => {
+            updateButton.disabled = false
           })
           .withFailureHandler((error) => {
-            console.error('FAILURE:', error)
+            updateButton.disabled = false
+            console.error(error)
           })
           .invoke('showModal', 'updateTracker')
-      }
+      })
 
-      document
-        .getElementById('import-progress')
-        .addEventListener('click', promptForImportUrl)
+      const importButton = document.getElementById('import-progress')
+      importButton.addEventListener('click', () => {
+        importButton.disabled = true
 
-      function promptForImportUrl() {
         google.script.run
-          .withSuccessHandler((result) => {
-            console.log('SUCCESS:', result)
+          .withSuccessHandler(() => {
+            importButton.disabled = false
           })
           .withFailureHandler((error) => {
-            console.error('FAILURE:', error)
+            importButton.disabled = false
+            console.error(error)
           })
           .invoke('promptForImportUrl')
-      }
+      })
     </script>
 
   </main>
