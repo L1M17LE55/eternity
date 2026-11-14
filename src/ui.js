@@ -17,3 +17,27 @@ export function showModal(method, ...args) {
   const html = template.evaluate()
   SpreadsheetApp.getUi().showModalDialog(html, 'Eternity')
 }
+
+export function promptForImportUrl() {
+  const ui = SpreadsheetApp.getUi()
+
+  while (true) {
+    const response = ui.prompt(
+      'Import progress',
+      'Paste the URL of your old tracker:',
+      ui.ButtonSet.OK_CANCEL
+    )
+
+    if (response.getSelectedButton() !== ui.Button.OK) {
+      return
+    }
+
+    const url = response.getResponseText().trim()
+
+    if (url) {
+      return showModal('importProgress', url)
+    }
+
+    ui.alert('Please provide a tracker URL.')
+  }
+}

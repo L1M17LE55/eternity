@@ -76,6 +76,10 @@ export function updateTracker() {
   return { status: 'tracker-updated' }
 }
 
+export function importTracker() {
+
+}
+
 function isTemplateTracker_(userTracker) {
   return userTracker.getId() === TEMPLATE_TRACKER_ID
 }
@@ -322,7 +326,9 @@ function syncUserTabOrder_(userTracker, templateTabMap) {
  * @param {TabMap} templateTabMap
  */
 function updateUserHub_(userTracker, userTabMap, templateTabMap) {
-  userTracker.deleteSheet(userTabMap[HUB_NAME])
+  if (userTabMap[HUB_NAME]) {
+    userTracker.deleteSheet(userTabMap[HUB_NAME])
+  }
   const newHub = templateTabMap[HUB_NAME].copyTo(userTracker)
   newHub.setName(HUB_NAME)
   userTracker.setActiveSheet(newHub)
