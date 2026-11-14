@@ -79,8 +79,8 @@ var App = (() => {
     Object.entries(copiedTabMap).forEach(([tabName, tab]) => {
       tab.setName(tabName);
     });
-    syncUserTabOrder_(userTracker, templateTabMap);
-    updateUserHub_(userTracker, userTabMap, templateTabMap);
+    syncTabPosition_(userTracker, templateTabMap);
+    updateHub_(userTracker, userTabMap, templateTabMap);
     if (skippedAchievements.length > 0) {
       return {
         status: "tracker-updated-with-warnings",
@@ -214,7 +214,7 @@ var App = (() => {
       (tabName) => !skippedTabs.has(tabName)
     );
   }
-  function syncUserTabOrder_(userTracker, templateTabMap) {
+  function syncTabPosition_(userTracker, templateTabMap) {
     const userTabMap = createTabMap_(userTracker);
     let position = 1;
     Object.keys(templateTabMap).forEach((tabName) => {
@@ -224,7 +224,7 @@ var App = (() => {
       }
     });
   }
-  function updateUserHub_(userTracker, userTabMap, templateTabMap) {
+  function updateHub_(userTracker, userTabMap, templateTabMap) {
     if (userTabMap[HUB_NAME]) {
       userTracker.deleteSheet(userTabMap[HUB_NAME]);
     }
@@ -395,7 +395,7 @@ var App = (() => {
       try {
         SpreadsheetApp.openById(trackerId);
       } catch (error) {
-        ui.alert(error);
+        ui.alert(error.message);
         continue;
       }
       return showModal("importProgress", trackerId);
