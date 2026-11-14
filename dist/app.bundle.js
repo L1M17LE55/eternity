@@ -303,9 +303,9 @@ var App = (() => {
 
       document
         .getElementById('import-progress')
-        .addEventListener('click', importProgress)
+        .addEventListener('click', promptForImportUrl)
 
-      function importProgress() {
+      function promptForImportUrl() {
         google.script.run
           .withSuccessHandler((result) => {
             console.log('SUCCESS:', result)
@@ -313,7 +313,7 @@ var App = (() => {
           .withFailureHandler((error) => {
             console.error('FAILURE:', error)
           })
-          .invoke('importProgress')
+          .invoke('promptForImportUrl')
       }
     </script>
 
