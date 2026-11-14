@@ -39,7 +39,12 @@ export function promptForImportUrl() {
       continue
     }
 
-    SpreadsheetApp.openById(id[1])
+    try {
+      SpreadsheetApp.openById(id[1])
+    } catch (error) {
+      ui.alert(error)
+      continue
+    }
 
     return showModal('importProgress', id[1])
   }
