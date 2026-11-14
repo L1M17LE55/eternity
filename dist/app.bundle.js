@@ -386,18 +386,13 @@ var App = (() => {
       if (response.getSelectedButton() !== ui.Button.OK) {
         return;
       }
-      const url = response.getResponseText().trim();
-      if (!url) {
+      const id = response.getResponseText().match(/\/d\/([^/]+)\//);
+      if (!id) {
         ui.alert("Please provide a valid URL.");
         continue;
       }
-      try {
-        SpreadsheetApp.openByUrl(url);
-      } catch (error) {
-        ui.alert(error.message);
-        continue;
-      }
-      return showModal("importProgress", url);
+      SpreadsheetApp.openById(id[1]);
+      return showModal("importProgress", id[1]);
     }
   }
   return __toCommonJS(app_exports);
