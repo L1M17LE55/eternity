@@ -5,7 +5,7 @@
  * @typedef {Record<TabName, Tab>} TabMap
  */
 
-const TEMPLATE_TRACKER_ID = '1p3p25O57MnzHDMGSyZsprkPWUb4EyeBAiNCql-li6Uo'
+const TEMPLATE_TRACKER_ID = '18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw'
 const HUB_NAME = 'Home'
 
 export function updateTracker() {
@@ -19,6 +19,7 @@ export function updateTracker() {
 
   const userTabMap = createTabMap_(userTracker)
   const templateTabMap = createTabMap_(templateTracker)
+
   const { missingTabs, outdatedTabs } = diffTabs_(userTabMap, templateTabMap)
   const tabsToUpdate = [...missingTabs, ...outdatedTabs]
 
@@ -38,6 +39,7 @@ export function updateTracker() {
 
   const { tabsWithProgress, tabsWithoutProgress }
     = splitTabsByProgress_(outdatedTabs, userTabMap)
+
   const trashBin = [...tabsWithoutProgress]
   const skippedAchievements = []
 
