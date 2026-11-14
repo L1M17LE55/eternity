@@ -34,10 +34,18 @@ export function promptForImportUrl() {
 
     const url = response.getResponseText().trim()
 
-    if (url) {
-      return showModal('importProgress', url)
+    if (!url) {
+      ui.alert('Please provide a valid URL.')
+      continue
     }
 
-    ui.alert('Please provide a tracker URL.')
+    try {
+      SpreadsheetApp.openByUrl(url)
+    } catch (error) {
+      ui.alert(error.message)
+      continue
+    }
+
+    return showModal('importProgress', url)
   }
 }
