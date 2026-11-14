@@ -287,16 +287,22 @@ var App = (() => {
     <button id="import-progress">Import progress</button>
 
     <script>
+      function disableButtons(disabled) {
+        document.querySelectorAll('button').forEach((button) => {
+          button.disabled = disabled
+        })
+      }
+
       const updateButton = document.getElementById('update-tracker')
       updateButton.addEventListener('click', () => {
-        updateButton.disabled = true
+        disableButtons(true)
 
         google.script.run
           .withSuccessHandler(() => {
-            updateButton.disabled = false
+            disableButtons(false)
           })
           .withFailureHandler((error) => {
-            updateButton.disabled = false
+            disableButtons(false)
             console.error(error)
           })
           .invoke('showModal', 'updateTracker')
@@ -304,14 +310,14 @@ var App = (() => {
 
       const importButton = document.getElementById('import-progress')
       importButton.addEventListener('click', () => {
-        importButton.disabled = true
+        disableButtons(true)
 
         google.script.run
           .withSuccessHandler(() => {
-            importButton.disabled = false
+            disableButtons(false)
           })
           .withFailureHandler((error) => {
-            importButton.disabled = false
+            disableButtons(false)
             console.error(error)
           })
           .invoke('promptForImportUrl')
