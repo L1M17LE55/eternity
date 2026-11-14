@@ -115,9 +115,9 @@ function diffTabs_(userTabMap, templateTabMap) {
     }
 
     const templateTab = templateTabMap[tabName]
-
     const tabVersion = tab.getRange('A1').getValue()
     const templateTabVersion = templateTab.getRange('A1').getValue()
+
     if (tabVersion !== templateTabVersion) {
       outdatedTabs.push(tabName)
     }
@@ -143,16 +143,11 @@ function splitTabsByProgress_(tabNames, tabMap) {
 
   tabNames.forEach((tabName) => {
     const tab = tabMap[tabName]
-    // const lastRow = tab.getLastRow()
-    // const hasProgress = lastRow > 0
-    //   && tab.getRange(1, 1, lastRow, 1)
-    //     .getValues()
-    //     .some(([value]) => value === true)
-
-    const hasProgress = tab
-      .getRange(1, 1, tab.getLastRow(), 1)
-      .getValues()
-      .some(([value]) => value === true)
+    const lastRow = tab.getLastRow()
+    const hasProgress = lastRow > 0
+      && tab.getRange(1, 1, lastRow, 1)
+        .getValues()
+        .some(([value]) => value === true)
 
     if (hasProgress) {
       tabsWithProgress.push(tabName)
@@ -238,17 +233,12 @@ function getSrcAchievements_(tab) {
  * @returns {Map<string, number>}
  */
 function getDestAchievements_(tab) {
-  // const lastRow = tab.getLastRow()
-  // const columnB = lastRow > 0
-  //   && tab.getRange(1, 2, lastRow, 1)
-  //     .getValues()
-
-  const columnB = tab
-    .getRange(1, 2, tab.getLastRow(), 1)
-    .getValues()
+  const lastRow = tab.getLastRow()
+  const columnB = lastRow > 0
+    ? tab.getRange(1, 2, lastRow, 1).getValues()
+    : []
 
   const destAchievements = new Map()
-
   columnB.forEach(([achievement], index) => {
     if (achievement !== '') {
       destAchievements.set(achievement, index + 1)
