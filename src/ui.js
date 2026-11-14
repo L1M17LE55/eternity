@@ -32,20 +32,20 @@ export function promptForImportUrl() {
       return
     }
 
-    const id = response.getResponseText().match(/\/d\/([^/]+)\//)
+    const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1]
 
-    if (!id) {
+    if (!trackerId) {
       ui.alert('Please provide a valid URL.')
       continue
     }
 
     try {
-      SpreadsheetApp.openById(id[1])
+      SpreadsheetApp.openById(trackerId)
     } catch (error) {
       ui.alert(error)
       continue
     }
 
-    return showModal('importProgress', id[1])
+    return showModal('importProgress', trackerId)
   }
 }

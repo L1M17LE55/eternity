@@ -312,10 +312,11 @@ function getBackupsToDelete_(tabNames, skippedAchievements) {
  */
 function syncUserTabOrder_(userTracker, templateTabMap) {
   const userTabMap = createTabMap_(userTracker)
-  Object.keys(templateTabMap).forEach((tabName, index) => {
+  let position = 1
+  Object.keys(templateTabMap).forEach((tabName) => {
     if (tabName !== HUB_NAME) {
       userTracker.setActiveSheet(userTabMap[tabName])
-      userTracker.moveActiveSheet(index + 1)
+      userTracker.moveActiveSheet(position++)
     }
   })
 }
