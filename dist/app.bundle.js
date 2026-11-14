@@ -127,8 +127,7 @@ var App = (() => {
     const tabsWithoutProgress = [];
     tabNames.forEach((tabName) => {
       const tab = tabMap[tabName];
-      const lastRow = tab.getLastRow();
-      const hasProgress = lastRow > 0 && tab.getRange(1, 1, lastRow, 1).getValues().some(([value]) => value === true);
+      const hasProgress = tab.getRange(1, 1, tab.getLastRow(), 1).getValues().some(([value]) => value === true);
       if (hasProgress) {
         tabsWithProgress.push(tabName);
       } else {
@@ -175,8 +174,7 @@ var App = (() => {
     return srcAchievements;
   }
   function getDestAchievements_(tab) {
-    const lastRow = tab.getLastRow();
-    const columnB = lastRow > 0 && tab.getRange(1, 2, lastRow, 1).getValues();
+    const columnB = tab.getRange(1, 2, tab.getLastRow(), 1).getValues();
     const destAchievements = /* @__PURE__ */ new Map();
     columnB.forEach(([achievement], index) => {
       if (achievement !== "") {
