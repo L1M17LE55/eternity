@@ -277,6 +277,7 @@ var App = (() => {
 
     .sidebar-footer {
       margin-top: auto;
+      padding-bottom: 8px;
     }
   </style>
 
