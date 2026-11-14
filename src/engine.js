@@ -5,7 +5,7 @@
  * @typedef {Record<TabName, Tab>} TabMap
  */
 
-const TEMPLATE_TRACKER_ID = '18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw'
+const TEMPLATE_TRACKER_ID = '1p3p25O57MnzHDMGSyZsprkPWUb4EyeBAiNCql-li6Uo'
 const HUB_NAME = 'Home'
 
 export function updateTracker() {
