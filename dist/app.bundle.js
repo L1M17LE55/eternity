@@ -35,7 +35,7 @@ var App = (() => {
   __export(engine_exports, {
     updateTracker: () => updateTracker
   });
-  var TEMPLATE_TRACKER_ID = "1HTp_zRtmwYQwtsmt0swFiY08RWKTRjSBWpVynM3bHvE";
+  var TEMPLATE_TRACKER_ID = "18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw";
   var HUB_NAME = "Home";
   function updateTracker() {
     const userTracker = SpreadsheetApp.getActiveSpreadsheet();
