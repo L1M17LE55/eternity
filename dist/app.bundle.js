@@ -285,8 +285,17 @@ var App = (() => {
 
 <body>
   <main>
-    <button id="update-tracker">Update tracker</button>
-    <button id="import-progress">Import progress</button>
+    <div class="sidebar-buttons">
+      <div class="sidebar-action">
+        <button id="update-tracker">Update tracker</button>
+        <p>Genshin Impact v<?= gameVersion ?> achievements are available!</p>
+      </div>
+
+      <div class="sidebar-action">
+        <button id="import-progress">Import progress</button>
+        <p>Transfer progress from an older tracker.</p>
+      </div>
+    </div>
 
     <script>
       function disableButtons(disabled) {
@@ -330,7 +339,7 @@ var App = (() => {
 
   <footer class="sidebar-footer">
     <span>Version
-      <?= version ?>
+      <?= bundleVersion ?>
     </span>
   </footer>
 
@@ -374,8 +383,9 @@ var App = (() => {
   // src/ui.js
   function showSidebar() {
     const template = HtmlService.createTemplate(sidebar_default);
-    template.version = metadata_default.bundleVersion;
-    const html = HtmlService.createHtmlOutput(template.evaluate()).setTitle("Eternity Alpha");
+    template.bundleVersion = metadata_default.bundleVersion;
+    template.gameVersion = metadata_default.gameVersion;
+    const html = template.evaluate().setTitle("Eternity Alpha");
     SpreadsheetApp.getUi().showSidebar(html);
   }
   function showModal(method, ...args) {
