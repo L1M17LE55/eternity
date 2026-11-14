@@ -1,7 +1,8 @@
 /* APP_METADATA
 {
   "nexusVersion": "1.0.0-alpha.1",
-  "bundleVersion": "1.0.0-alpha.1"
+  "bundleVersion": "1.0.0-alpha.1",
+  "gameVersion": "7.1"
 }
 */
 var App = (() => {
@@ -33,6 +34,7 @@ var App = (() => {
   // src/engine.js
   var engine_exports = {};
   __export(engine_exports, {
+    importTracker: () => importTracker,
     updateTracker: () => updateTracker
   });
   var TEMPLATE_TRACKER_ID = "18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw";
@@ -86,6 +88,8 @@ var App = (() => {
       };
     }
     return { status: "tracker-updated" };
+  }
+  function importTracker() {
   }
   function isTemplateTracker_(userTracker) {
     return userTracker.getId() === TEMPLATE_TRACKER_ID;
@@ -220,7 +224,9 @@ var App = (() => {
     });
   }
   function updateUserHub_(userTracker, userTabMap, templateTabMap) {
-    userTracker.deleteSheet(userTabMap[HUB_NAME]);
+    if (userTabMap[HUB_NAME]) {
+      userTracker.deleteSheet(userTabMap[HUB_NAME]);
+    }
     const newHub = templateTabMap[HUB_NAME].copyTo(userTracker);
     newHub.setName(HUB_NAME);
     userTracker.setActiveSheet(newHub);
@@ -230,6 +236,7 @@ var App = (() => {
   // src/ui.js
   var ui_exports = {};
   __export(ui_exports, {
+    promptForImportUrl: () => promptForImportUrl,
     showModal: () => showModal,
     showSidebar: () => showSidebar
   });
@@ -237,7 +244,8 @@ var App = (() => {
   // src/metadata.json
   var metadata_default = {
     nexusVersion: "1.0.0-alpha.1",
-    bundleVersion: "1.0.0-alpha.1"
+    bundleVersion: "1.0.0-alpha.1",
+    gameVersion: "7.1"
   };
 
   // src/html/sidebar.html
@@ -348,6 +356,24 @@ var App = (() => {
     template.payload = JSON.stringify({ method, args });
     const html = template.evaluate();
     SpreadsheetApp.getUi().showModalDialog(html, "Eternity");
+  }
+  function promptForImportUrl() {
+    const ui = SpreadsheetApp.getUi();
+    while (true) {
+      const response = ui.prompt(
+        "Import progress",
+        "Paste the URL of your old tracker:",
+        ui.ButtonSet.OK_CANCEL
+      );
+      if (response.getSelectedButton() !== ui.Button.OK) {
+        return;
+      }
+      const url = response.getResponseText().trim();
+      if (url) {
+        return showModal("importProgress", url);
+      }
+      ui.alert("Please provide a tracker URL.");
+    }
   }
   return __toCommonJS(app_exports);
 })();
