@@ -4,10 +4,10 @@ import modal from './html/modal.html'
 
 export function showSidebar() {
   const template = HtmlService.createTemplate(sidebar)
-  template.version = metadata.bundleVersion
+  template.bundleVersion = metadata.bundleVersion
+  template.gameVersion = metadata.gameVersion
 
-  const html = HtmlService.createHtmlOutput(template.evaluate())
-    .setTitle('Eternity Alpha')
+  const html = template.evaluate().setTitle('Eternity Alpha')
   SpreadsheetApp.getUi().showSidebar(html)
 }
 
