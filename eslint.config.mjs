@@ -4,7 +4,9 @@ import stylistic from "@stylistic/eslint-plugin";
 import stylisticRules from "../stylistic.rules.mjs";
 import googleAppsScript from "eslint-plugin-googleappsscript";
 import globals from "globals";
-import html from "eslint-plugin-html"
+import htmlParser from "@html-eslint/parser";
+import html from "@html-eslint/eslint-plugin";
+import jsInHtml from "eslint-plugin-html";
 
 export default defineConfig([
   {
@@ -17,13 +19,13 @@ export default defineConfig([
   {
     files: ["src/**/*.js"],
     extends: [stylistic.configs.recommended],
-    rules: {
-      ...stylisticRules
-    },
     languageOptions: {
       sourceType: "module",
       globals: googleAppsScript.environments.googleappsscript.globals
-    }
+    },
+    rules: {
+      ...stylisticRules
+    },
   },
   {
     files: ["src/**/nexus.js"],
@@ -38,22 +40,32 @@ export default defineConfig([
   },
   {
     files: ["src/**/*.html"],
+    plugins: {
+      js,
+      html,
+      jsInHtml
+    },
     extends: [
-      js.configs.recommended,
+      "js/recommended",
+      "html/recommended",
       stylistic.configs.recommended
     ],
-    rules: {
-      ...stylisticRules
-    },
-    plugins: {
-      html: html,
-    },
     languageOptions: {
+      parser: htmlParser,
+      parserOptions: {
+        templateEngineSyntax: {
+          "<?": "?>"
+        }
+      },
       globals: {
         ...globals.browser,
         ...googleAppsScript.environments.googleappsscript.globals,
         google: "readonly"
       }
+    },
+    rules: {
+      ...stylisticRules,
+      "html/indent": ["error", 2, { "tagChildrenIndent": { "html": 0 } }]
     }
   }
 ]);

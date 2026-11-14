@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <base target="_top">
   <meta charset="UTF-8">
   <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <title>Eternity Modal</title>
 </head>
 
 <body>
   <div id="method-data" data-payload="<?= payload ?>"></div>
-
   <p id="result">Loading...</p>
-  
+
   <script>
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
-
     google.script.run
       .withSuccessHandler((result) => {
         document.getElementById('result').textContent = result
@@ -24,6 +22,7 @@
       })
       .invoke(method, ...args)
   </script>
+
 </body>
 
 </html>

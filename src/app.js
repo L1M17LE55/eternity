@@ -1,4 +1,2 @@
-import * as engine from './engine.js'
-import * as ui from './ui.js'
-
-export { engine, ui }
+export * as engine from './engine.js'
+export * as ui from './ui.js'

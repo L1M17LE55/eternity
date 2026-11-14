@@ -1,27 +1,61 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+  <title>Eternity Sidebar</title>
+
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+    }
+  </style>
+
 </head>
 
 <body>
-  <button onclick="sayHello()">Hello</button>
-  <script>
-    function sayHello() {
-      google.script.run
-        .withSuccessHandler((result) => {
-          console.log('SUCCESS:', result)
-        })
-        .withFailureHandler((error) => {
-          console.error('FAILURE:', error)
-        })
-        .invoke('showModal', 'helloFromEngine')
-    }
-  </script>
+  <main>
+    <button id="update-tracker">Update tracker</button>
+
+    <script>
+      document
+        .getElementById('update-tracker')
+        .addEventListener('click', updateTracker)
+
+      function updateTracker() {
+        google.script.run
+          .withSuccessHandler((result) => {
+            console.log('SUCCESS:', result)
+          })
+          .withFailureHandler((error) => {
+            console.error('FAILURE:', error)
+          })
+          .invoke('showModal', 'updateTracker')
+      }
+    </script>
+
+  </main>
+
+  <footer class="sidebar-footer">
+    <span>Version <?= version ?></span>
+  </footer>
+
 </body>
 
 </html>

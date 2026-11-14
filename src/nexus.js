@@ -59,10 +59,11 @@ function fetchBundle_() {
   }
 
   if (statusCode !== 200) {
-    SpreadsheetApp.getUi().alert(
+    const ui = SpreadsheetApp.getUi()
+    ui.alert(
       'Something Went Wrong :(',
       'Please try again',
-      SpreadsheetApp.getUi().ButtonSet.OK
+      ui.ButtonSet.OK
     )
     throw new Error(`HTTP_STATUS_${statusCode}`)
   }
@@ -90,10 +91,11 @@ function getMetadata_(bundle) {
 function purgeNexusAndUpdate_() {
   props().deleteProperty('NEXUS')
   cache().remove('NEXUS')
-  SpreadsheetApp.getUi().alert(
+  const ui = SpreadsheetApp.getUi()
+  ui.alert(
     'New Version Available',
     'Please reopen the app',
-    SpreadsheetApp.getUi().ButtonSet.OK
+    ui.ButtonSet.OK
   )
 }
 
@@ -101,12 +103,12 @@ function showModal(method, ...args) {
   app().ui.showModal(method, ...args)
 }
 
-function helloFromEngine() {
-  return app().engine.helloFromEngine()
+function updateTracker() {
+  return app().engine.updateTracker()
 }
 
 return {
   bootstrapApp,
   showModal,
-  helloFromEngine
+  updateTracker
 }

@@ -1,8 +1,13 @@
+import metadata from './metadata.json'
 import sidebar from './html/sidebar.html'
 import modal from './html/modal.html'
 
 export function showSidebar() {
-  const html = HtmlService.createHtmlOutput(sidebar).setTitle('Eternity')
+  const template = HtmlService.createTemplate(sidebar)
+  template.version = metadata.bundleVersion
+
+  const html = HtmlService.createHtmlOutput(template.evaluate())
+    .setTitle('Eternity Alpha')
   SpreadsheetApp.getUi().showSidebar(html)
 }
 
