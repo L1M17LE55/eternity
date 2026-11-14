@@ -283,6 +283,7 @@ var App = (() => {
 <body>
   <main>
     <button id="update-tracker">Update tracker</button>
+    <button id="import-progress">Import progress</button>
 
     <script>
       document
@@ -299,12 +300,29 @@ var App = (() => {
           })
           .invoke('showModal', 'updateTracker')
       }
+
+      document
+        .getElementById('import-progress')
+        .addEventListener('click', importProgress)
+
+      function importProgress() {
+        google.script.run
+          .withSuccessHandler((result) => {
+            console.log('SUCCESS:', result)
+          })
+          .withFailureHandler((error) => {
+            console.error('FAILURE:', error)
+          })
+          .invoke('importProgress')
+      }
     </script>
 
   </main>
 
   <footer class="sidebar-footer">
-    <span>Version <?= version ?></span>
+    <span>Version
+      <?= version ?>
+    </span>
   </footer>
 
 </body>
