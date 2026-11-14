@@ -42,7 +42,7 @@ export function promptForImportUrl() {
     try {
       SpreadsheetApp.openById(trackerId)
     } catch (error) {
-      ui.alert(error)
+      ui.alert(error.message)
       continue
     }
 

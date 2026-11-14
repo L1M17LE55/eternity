@@ -63,8 +63,8 @@ export function updateTracker() {
     tab.setName(tabName)
   })
 
-  syncUserTabOrder_(userTracker, templateTabMap)
-  updateUserHub_(userTracker, userTabMap, templateTabMap)
+  syncTabPosition_(userTracker, templateTabMap)
+  updateHub_(userTracker, userTabMap, templateTabMap)
 
   if (skippedAchievements.length > 0) {
     return {
@@ -310,7 +310,7 @@ function getBackupsToDelete_(tabNames, skippedAchievements) {
  * @param {Tracker} userTracker
  * @param {TabMap} templateTabMap
  */
-function syncUserTabOrder_(userTracker, templateTabMap) {
+function syncTabPosition_(userTracker, templateTabMap) {
   const userTabMap = createTabMap_(userTracker)
   let position = 1
   Object.keys(templateTabMap).forEach((tabName) => {
@@ -326,7 +326,7 @@ function syncUserTabOrder_(userTracker, templateTabMap) {
  * @param {TabMap} userTabMap
  * @param {TabMap} templateTabMap
  */
-function updateUserHub_(userTracker, userTabMap, templateTabMap) {
+function updateHub_(userTracker, userTabMap, templateTabMap) {
   if (userTabMap[HUB_NAME]) {
     userTracker.deleteSheet(userTabMap[HUB_NAME])
   }
