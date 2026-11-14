@@ -216,10 +216,11 @@ var App = (() => {
   }
   function syncUserTabOrder_(userTracker, templateTabMap) {
     const userTabMap = createTabMap_(userTracker);
-    Object.keys(templateTabMap).forEach((tabName, index) => {
+    let position = 1;
+    Object.keys(templateTabMap).forEach((tabName) => {
       if (tabName !== HUB_NAME) {
         userTracker.setActiveSheet(userTabMap[tabName]);
-        userTracker.moveActiveSheet(index + 1);
+        userTracker.moveActiveSheet(position++);
       }
     });
   }
@@ -386,18 +387,18 @@ var App = (() => {
       if (response.getSelectedButton() !== ui.Button.OK) {
         return;
       }
-      const id = response.getResponseText().match(/\/d\/([^/]+)\//);
-      if (!id) {
+      const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1];
+      if (!trackerId) {
         ui.alert("Please provide a valid URL.");
         continue;
       }
       try {
-        SpreadsheetApp.openById(id[1]);
+        SpreadsheetApp.openById(trackerId);
       } catch (error) {
         ui.alert(error);
         continue;
       }
-      return showModal("importProgress", id[1]);
+      return showModal("importProgress", trackerId);
     }
   }
   return __toCommonJS(app_exports);
