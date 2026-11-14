@@ -15,7 +15,8 @@
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
     google.script.run
       .withSuccessHandler((result) => {
-        document.getElementById('result').textContent = result
+        document.getElementById('result').textContent
+          = JSON.stringify(result, null, 2)
       })
       .withFailureHandler((error) => {
         document.getElementById('result').textContent = error.message
