@@ -107,8 +107,13 @@ function updateTracker() {
   return app().engine.updateTracker()
 }
 
+function promptForImportUrl() {
+  app().ui.promptForImportUrl()
+}
+
 return {
   bootstrapApp,
   showModal,
-  updateTracker
+  updateTracker,
+  promptForImportUrl
 }
