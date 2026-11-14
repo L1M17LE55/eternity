@@ -214,7 +214,8 @@ var App = (() => {
     const userTabMap = createTabMap_(userTracker);
     Object.keys(templateTabMap).forEach((tabName, index) => {
       if (tabName !== HUB_NAME) {
-        userTabMap[tabName].setIndex(index + 1);
+        userTracker.setActiveSheet(userTabMap[tabName]);
+        userTracker.moveActiveSheet(index + 1);
       }
     });
   }
@@ -222,7 +223,8 @@ var App = (() => {
     userTracker.deleteSheet(userTabMap[HUB_NAME]);
     const newHub = templateTabMap[HUB_NAME].copyTo(userTracker);
     newHub.setName(HUB_NAME);
-    newHub.setIndex(1);
+    userTracker.setActiveSheet(newHub);
+    userTracker.moveActiveSheet(1);
   }
 
   // src/ui.js
