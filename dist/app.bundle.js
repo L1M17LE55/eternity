@@ -295,7 +295,7 @@ var App = (() => {
 
       <div class="sidebar-action">
         <button id="import-progress">Import progress</button>
-        <p>Transfer achievement progress from your old spreadsheet.</p>
+        <p>Transfer achievement progress from your old Wonders of the World checklist.</p>
       </div>
     </div>
 
