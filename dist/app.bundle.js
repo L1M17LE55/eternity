@@ -288,12 +288,14 @@ var App = (() => {
     <div class="sidebar-buttons">
       <div class="sidebar-action">
         <button id="update-tracker">Update tracker</button>
-        <p>Genshin Impact v<?= gameVersion ?> achievements are available!</p>
+        <p>Genshin Impact v
+          <?= gameVersion ?> achievements are available!
+        </p>
       </div>
 
       <div class="sidebar-action">
         <button id="import-progress">Import progress</button>
-        <p>Transfer progress from an older tracker.</p>
+        <p>Transfer achievement progress from your old spreadsheet.</p>
       </div>
     </div>
 
