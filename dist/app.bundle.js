@@ -410,7 +410,7 @@ var App = (() => {
       const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1];
       if (!trackerId) {
         ui.alert(
-          "Please paste a valid link. Example:/nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
+          "Please paste a valid link.\n\n Example:\nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
         );
         continue;
       }
