@@ -401,7 +401,7 @@ var App = (() => {
     while (true) {
       const response = ui.prompt(
         "Import progress",
-        "Paste the URL of your old tracker:",
+        "Paste a link to your old Wonders of the World checklist:",
         ui.ButtonSet.OK_CANCEL
       );
       if (response.getSelectedButton() !== ui.Button.OK) {
@@ -409,7 +409,9 @@ var App = (() => {
       }
       const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1];
       if (!trackerId) {
-        ui.alert("Please provide a valid URL.");
+        ui.alert(
+          "Please paste a valid link. Example:/nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
+        );
         continue;
       }
       try {
