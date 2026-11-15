@@ -36,7 +36,7 @@ export function promptForImportUrl() {
 
     if (!trackerId) {
       ui.alert(
-        'Please paste a valid link. Example:/n'
+        'Please paste a valid link.\n\n Example:\n'
         + 'https://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing'
       )
       continue
