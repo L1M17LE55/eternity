@@ -288,9 +288,7 @@ var App = (() => {
     <div class="sidebar-buttons">
       <div class="sidebar-action">
         <button id="update-tracker">Update tracker</button>
-        <p>Genshin Impact v
-          <?= gameVersion ?> achievements are available!
-        </p>
+        <p>Genshin Impact <code>v<?= gameVersion ?></code> achievements are available!</p>
       </div>
 
       <div class="sidebar-action">
@@ -340,9 +338,7 @@ var App = (() => {
   </main>
 
   <footer class="sidebar-footer">
-    <span>Version
-      <?= bundleVersion ?>
-    </span>
+    <code>Version <?= bundleVersion ?></code>
   </footer>
 
 </body>
@@ -410,7 +406,7 @@ var App = (() => {
       const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1];
       if (!trackerId) {
         ui.alert(
-          "Please paste a valid link.\n\n Example:\nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
+          "Please paste a valid link.\n\nExample:\nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
         );
         continue;
       }
