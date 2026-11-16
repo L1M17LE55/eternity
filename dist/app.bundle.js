@@ -359,7 +359,7 @@ var App = (() => {
             disableButtons(false)
             console.error(error)
           })
-          .invoke('promptForImportUrl')
+          .invoke('showImportPrompt')
       })
     </script>
 
