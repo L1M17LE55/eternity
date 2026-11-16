@@ -9,18 +9,18 @@ const TEMPLATE_TRACKER_ID = '18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw'
 const HUB_NAME = 'Home'
 
 export function updateTracker() {
-  const userTracker = SpreadsheetApp.getActiveSpreadsheet()
+  const currentTracker = SpreadsheetApp.getActiveSpreadsheet()
 
-  if (isTemplateTracker_(userTracker)) {
-    throw new Error('Nope!')
+  if (currentTracker.getId() === TEMPLATE_TRACKER_ID) {
+    return { status: 'current-is-template' }
   }
 
   const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID)
 
-  const userTabMap = createTabMap_(userTracker)
+  const currentTabMap = createTabMap_(currentTracker)
   const templateTabMap = createTabMap_(templateTracker)
 
-  const { missingTabs, outdatedTabs } = diffTabs_(userTabMap, templateTabMap)
+  const { missingTabs, outdatedTabs } = diffTabs_(currentTabMap, templateTabMap)
   const tabsToUpdate = [...missingTabs, ...outdatedTabs]
 
   if (tabsToUpdate.length === 0) {
@@ -32,22 +32,22 @@ export function updateTracker() {
       const templateTab = templateTabMap[tabName]
       return [
         tabName,
-        templateTab.copyTo(userTracker)
+        templateTab.copyTo(currentTracker)
       ]
     })
   )
 
   const { tabsWithProgress, tabsWithoutProgress }
-    = splitTabsByProgress_(outdatedTabs, userTabMap)
+    = splitTabsByProgress_(outdatedTabs, currentTabMap)
 
   const trashBin = [...tabsWithoutProgress]
   const skippedAchievements = []
 
   if (tabsWithProgress.length > 0) {
-    backUpTabs_(tabsWithProgress, userTabMap)
+    backUpTabs_(tabsWithProgress, currentTabMap)
 
     skippedAchievements.push(
-      ...transferAchievementProgress_(tabsWithProgress, userTabMap, copiedTabMap)
+      ...transferAchievementProgress_(tabsWithProgress, currentTabMap, copiedTabMap)
     )
 
     trashBin.push(
@@ -56,15 +56,15 @@ export function updateTracker() {
   }
 
   trashBin.forEach((tabName) => {
-    userTracker.deleteSheet(userTabMap[tabName])
+    currentTracker.deleteSheet(currentTabMap[tabName])
   })
 
   Object.entries(copiedTabMap).forEach(([tabName, tab]) => {
     tab.setName(tabName)
   })
 
-  syncTabPosition_(userTracker, templateTabMap)
-  updateHub_(userTracker, userTabMap, templateTabMap)
+  syncTabPosition_(currentTracker, templateTabMap)
+  updateHub_(currentTracker, currentTabMap, templateTabMap)
 
   if (skippedAchievements.length > 0) {
     return {
@@ -76,36 +76,81 @@ export function updateTracker() {
   return { status: 'tracker-updated' }
 }
 
-export function importTracker() {
+export function importProgress(sourceTrackerId) {
+  if (sourceTrackerId === TEMPLATE_TRACKER_ID) {
+    return { status: 'source-is-template' }
+  }
 
-}
+  const currentTracker = SpreadsheetApp.getActiveSpreadsheet()
 
-function isTemplateTracker_(userTracker) {
-  return userTracker.getId() === TEMPLATE_TRACKER_ID
+  if (sourceTrackerId === currentTracker.getId()) {
+    return { status: 'source-is-current' }
+  }
+
+  const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID)
+  const templateTabs = templateTracker.getSheets()
+    .map(tab => tab.getName())
+    .filter(tabName => tabName !== HUB_NAME)
+
+  const sourceTracker = SpreadsheetApp.openById(sourceTrackerId)
+
+  const sourceTabMap = createTabMap_(sourceTracker, templateTabs)
+  const sourceTabs = Object.keys(sourceTabMap)
+
+  if (sourceTabs.length === 0) {
+    return { status: 'no-valid-source-tabs' }
+  }
+
+  const currentTabMap = createTabMap_(currentTracker, sourceTabs)
+  const commonTabs = Object.keys(currentTabMap)
+
+  if (commonTabs.length === 0) {
+    return { status: 'no-valid-common-tabs' }
+  }
+
+  const { tabsWithProgress } = splitTabsByProgress_(commonTabs, sourceTabMap)
+
+  if (tabsWithProgress.length === 0) {
+    return { status: 'no-progress-to-import' }
+  }
+
+  const skippedAchievements = transferAchievementProgress_(tabsWithProgress, sourceTabMap, currentTabMap)
+
+  if (skippedAchievements.length > 0) {
+    return {
+      status: 'progress-imported-with-warnings',
+      skippedAchievements
+    }
+  }
+
+  return { status: 'progress-imported' }
 }
 
 /**
  * @param {Tracker} tracker
+ * @param {TabName[]} [allowlist]
  * @returns {TabMap}
  */
-function createTabMap_(tracker) {
-  return Object.fromEntries(
-    tracker.getSheets().map(tab => [
-      tab.getName(),
-      tab
-    ])
-  )
+function createTabMap_(tracker, allowlist) {
+  let tabEntries = tracker.getSheets()
+    .map(tab => [tab.getName(), tab])
+
+  if (allowlist) {
+    tabEntries = tabEntries.filter(([tabName]) => allowlist.includes(tabName))
+  }
+
+  return Object.fromEntries(tabEntries)
 }
 
 /**
- * @param {TabMap} userTabMap
+ * @param {TabMap} currentTabMap
  * @param {TabMap} templateTabMap
  * @returns {{
  *  missingTabs: TabName[],
  *  outdatedTabs: TabName[]
  * }}
  */
-function diffTabs_(userTabMap, templateTabMap) {
+function diffTabs_(currentTabMap, templateTabMap) {
   const missingTabs = []
   const outdatedTabs = []
 
@@ -114,7 +159,7 @@ function diffTabs_(userTabMap, templateTabMap) {
       continue
     }
 
-    const tab = userTabMap[tabName]
+    const tab = currentTabMap[tabName]
     if (!tab) {
       missingTabs.push(tabName)
       continue
@@ -307,31 +352,31 @@ function getBackupsToDelete_(tabNames, skippedAchievements) {
 }
 
 /**
- * @param {Tracker} userTracker
+ * @param {Tracker} currentTracker
  * @param {TabMap} templateTabMap
  */
-function syncTabPosition_(userTracker, templateTabMap) {
-  const userTabMap = createTabMap_(userTracker)
+function syncTabPosition_(currentTracker, templateTabMap) {
+  const currentTabMap = createTabMap_(currentTracker)
   let position = 1
   Object.keys(templateTabMap).forEach((tabName) => {
     if (tabName !== HUB_NAME) {
-      userTracker.setActiveSheet(userTabMap[tabName])
-      userTracker.moveActiveSheet(position++)
+      currentTracker.setActiveSheet(currentTabMap[tabName])
+      currentTracker.moveActiveSheet(position++)
     }
   })
 }
 
 /**
- * @param {Tracker} userTracker
- * @param {TabMap} userTabMap
+ * @param {Tracker} currentTracker
+ * @param {TabMap} currentTabMap
  * @param {TabMap} templateTabMap
  */
-function updateHub_(userTracker, userTabMap, templateTabMap) {
-  if (userTabMap[HUB_NAME]) {
-    userTracker.deleteSheet(userTabMap[HUB_NAME])
+function updateHub_(currentTracker, currentTabMap, templateTabMap) {
+  if (currentTabMap[HUB_NAME]) {
+    currentTracker.deleteSheet(currentTabMap[HUB_NAME])
   }
-  const newHub = templateTabMap[HUB_NAME].copyTo(userTracker)
+  const newHub = templateTabMap[HUB_NAME].copyTo(currentTracker)
   newHub.setName(HUB_NAME)
-  userTracker.setActiveSheet(newHub)
-  userTracker.moveActiveSheet(1)
+  currentTracker.setActiveSheet(newHub)
+  currentTracker.moveActiveSheet(1)
 }

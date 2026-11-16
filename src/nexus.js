@@ -61,7 +61,7 @@ function fetchBundle_() {
   if (statusCode !== 200) {
     const ui = SpreadsheetApp.getUi()
     ui.alert(
-      'Something Went Wrong :(',
+      'Something went wrong :(',
       'Please try again',
       ui.ButtonSet.OK
     )
@@ -93,27 +93,32 @@ function purgeNexusAndUpdate_() {
   cache().remove('NEXUS')
   const ui = SpreadsheetApp.getUi()
   ui.alert(
-    'New Version Available',
+    'Eternity app updated',
     'Please reopen the app',
     ui.ButtonSet.OK
   )
 }
 
 function showModal(method, ...args) {
-  app().ui.showModal(method, ...args)
+  return app().ui.showModal(method, ...args)
 }
 
 function updateTracker() {
   return app().engine.updateTracker()
 }
 
-function promptForImportUrl() {
-  app().ui.promptForImportUrl()
+function showImportPrompt() {
+  return app().ui.showImportPrompt()
+}
+
+function importProgress() {
+  return app().engine.importProgress()
 }
 
 return {
   bootstrapApp,
   showModal,
   updateTracker,
-  promptForImportUrl
+  showImportPrompt,
+  importProgress
 }

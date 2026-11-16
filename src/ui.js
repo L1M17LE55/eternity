@@ -18,12 +18,12 @@ export function showModal(method, ...args) {
   SpreadsheetApp.getUi().showModalDialog(html, 'Eternity')
 }
 
-export function promptForImportUrl() {
+export function showImportPrompt() {
   const ui = SpreadsheetApp.getUi()
 
   while (true) {
     const response = ui.prompt(
-      'Import progress',
+      'Transfer your progress',
       'Paste a link to your old Wonders of the World checklist:',
       ui.ButtonSet.OK_CANCEL
     )
@@ -36,9 +36,11 @@ export function promptForImportUrl() {
 
     if (!trackerId) {
       ui.alert(
-        'Please paste a valid link.\n\n'
+        `Couldn't recognize link :(`,
+        'Please paste a link to Google Sheets.\n\n'
         + 'Example:\n'
-        + 'https://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing'
+        + 'https://docs.google.com/spreadsheets/d/[ID]/edit?usp=sharing',
+        ui.ButtonSet.OK
       )
       continue
     }
