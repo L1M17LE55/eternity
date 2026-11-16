@@ -99,12 +99,8 @@ function purgeNexusAndUpdate_() {
   )
 }
 
-function showModal(method, ...args) {
-  return app().ui.showModal(method, ...args)
-}
-
 function updateTracker() {
-  return app().engine.updateTracker()
+  return app().ui.showModal('updateTracker')
 }
 
 function showImportPrompt() {
@@ -117,7 +113,6 @@ function importProgress(trackerId) {
 
 return {
   bootstrapApp,
-  showModal,
   updateTracker,
   showImportPrompt,
   importProgress
