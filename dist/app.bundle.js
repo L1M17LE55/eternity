@@ -34,20 +34,20 @@ var App = (() => {
   // src/engine.js
   var engine_exports = {};
   __export(engine_exports, {
-    importTracker: () => importTracker,
+    importProgress: () => importProgress,
     updateTracker: () => updateTracker
   });
   var TEMPLATE_TRACKER_ID = "18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw";
   var HUB_NAME = "Home";
   function updateTracker() {
-    const userTracker = SpreadsheetApp.getActiveSpreadsheet();
-    if (isTemplateTracker_(userTracker)) {
-      throw new Error("Nope!");
+    const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
+    if (currentTracker.getId() === TEMPLATE_TRACKER_ID) {
+      return { status: "current-is-template" };
     }
     const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID);
-    const userTabMap = createTabMap_(userTracker);
+    const currentTabMap = createTabMap_(currentTracker);
     const templateTabMap = createTabMap_(templateTracker);
-    const { missingTabs, outdatedTabs } = diffTabs_(userTabMap, templateTabMap);
+    const { missingTabs, outdatedTabs } = diffTabs_(currentTabMap, templateTabMap);
     const tabsToUpdate = [...missingTabs, ...outdatedTabs];
     if (tabsToUpdate.length === 0) {
       return { status: "tracker-up-to-date" };
@@ -57,30 +57,30 @@ var App = (() => {
         const templateTab = templateTabMap[tabName];
         return [
           tabName,
-          templateTab.copyTo(userTracker)
+          templateTab.copyTo(currentTracker)
         ];
       })
     );
-    const { tabsWithProgress, tabsWithoutProgress } = splitTabsByProgress_(outdatedTabs, userTabMap);
+    const { tabsWithProgress, tabsWithoutProgress } = splitTabsByProgress_(outdatedTabs, currentTabMap);
     const trashBin = [...tabsWithoutProgress];
     const skippedAchievements = [];
     if (tabsWithProgress.length > 0) {
-      backUpTabs_(tabsWithProgress, userTabMap);
+      backUpTabs_(tabsWithProgress, currentTabMap);
       skippedAchievements.push(
-        ...transferAchievementProgress_(tabsWithProgress, userTabMap, copiedTabMap)
+        ...transferAchievementProgress_(tabsWithProgress, currentTabMap, copiedTabMap)
       );
       trashBin.push(
         ...getBackupsToDelete_(tabsWithProgress, skippedAchievements)
       );
     }
     trashBin.forEach((tabName) => {
-      userTracker.deleteSheet(userTabMap[tabName]);
+      currentTracker.deleteSheet(currentTabMap[tabName]);
     });
     Object.entries(copiedTabMap).forEach(([tabName, tab]) => {
       tab.setName(tabName);
     });
-    syncTabPosition_(userTracker, templateTabMap);
-    updateHub_(userTracker, userTabMap, templateTabMap);
+    syncTabPosition_(currentTracker, templateTabMap);
+    updateHub_(currentTracker, currentTabMap, templateTabMap);
     if (skippedAchievements.length > 0) {
       return {
         status: "tracker-updated-with-warnings",
@@ -89,27 +89,55 @@ var App = (() => {
     }
     return { status: "tracker-updated" };
   }
-  function importTracker() {
+  function importProgress(sourceTrackerId) {
+    if (sourceTrackerId === TEMPLATE_TRACKER_ID) {
+      return { status: "source-is-template" };
+    }
+    const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
+    if (sourceTrackerId === currentTracker.getId()) {
+      return { status: "source-is-current" };
+    }
+    const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID);
+    const templateTabs = templateTracker.getSheets().map((tab) => tab.getName()).filter((tabName) => tabName !== HUB_NAME);
+    const sourceTracker = SpreadsheetApp.openById(sourceTrackerId);
+    const sourceTabMap = createTabMap_(sourceTracker, templateTabs);
+    const sourceTabs = Object.keys(sourceTabMap);
+    if (sourceTabs.length === 0) {
+      return { status: "no-valid-source-tabs" };
+    }
+    const currentTabMap = createTabMap_(currentTracker, sourceTabs);
+    const commonTabs = Object.keys(currentTabMap);
+    if (commonTabs.length === 0) {
+      return { status: "no-valid-common-tabs" };
+    }
+    const { tabsWithProgress } = splitTabsByProgress_(commonTabs, sourceTabMap);
+    if (tabsWithProgress.length === 0) {
+      return { status: "no-progress-to-import" };
+    }
+    const skippedAchievements = transferAchievementProgress_(tabsWithProgress, sourceTabMap, currentTabMap);
+    if (skippedAchievements.length > 0) {
+      return {
+        status: "progress-imported-with-warnings",
+        skippedAchievements
+      };
+    }
+    return { status: "progress-imported" };
   }
-  function isTemplateTracker_(userTracker) {
-    return userTracker.getId() === TEMPLATE_TRACKER_ID;
+  function createTabMap_(tracker, allowlist) {
+    let tabEntries = tracker.getSheets().map((tab) => [tab.getName(), tab]);
+    if (allowlist) {
+      tabEntries = tabEntries.filter(([tabName]) => allowlist.includes(tabName));
+    }
+    return Object.fromEntries(tabEntries);
   }
-  function createTabMap_(tracker) {
-    return Object.fromEntries(
-      tracker.getSheets().map((tab) => [
-        tab.getName(),
-        tab
-      ])
-    );
-  }
-  function diffTabs_(userTabMap, templateTabMap) {
+  function diffTabs_(currentTabMap, templateTabMap) {
     const missingTabs = [];
     const outdatedTabs = [];
     for (const tabName of Object.keys(templateTabMap)) {
       if (tabName === HUB_NAME) {
         continue;
       }
-      const tab = userTabMap[tabName];
+      const tab = currentTabMap[tabName];
       if (!tab) {
         missingTabs.push(tabName);
         continue;
@@ -214,30 +242,30 @@ var App = (() => {
       (tabName) => !skippedTabs.has(tabName)
     );
   }
-  function syncTabPosition_(userTracker, templateTabMap) {
-    const userTabMap = createTabMap_(userTracker);
+  function syncTabPosition_(currentTracker, templateTabMap) {
+    const currentTabMap = createTabMap_(currentTracker);
     let position = 1;
     Object.keys(templateTabMap).forEach((tabName) => {
       if (tabName !== HUB_NAME) {
-        userTracker.setActiveSheet(userTabMap[tabName]);
-        userTracker.moveActiveSheet(position++);
+        currentTracker.setActiveSheet(currentTabMap[tabName]);
+        currentTracker.moveActiveSheet(position++);
       }
     });
   }
-  function updateHub_(userTracker, userTabMap, templateTabMap) {
-    if (userTabMap[HUB_NAME]) {
-      userTracker.deleteSheet(userTabMap[HUB_NAME]);
+  function updateHub_(currentTracker, currentTabMap, templateTabMap) {
+    if (currentTabMap[HUB_NAME]) {
+      currentTracker.deleteSheet(currentTabMap[HUB_NAME]);
     }
-    const newHub = templateTabMap[HUB_NAME].copyTo(userTracker);
+    const newHub = templateTabMap[HUB_NAME].copyTo(currentTracker);
     newHub.setName(HUB_NAME);
-    userTracker.setActiveSheet(newHub);
-    userTracker.moveActiveSheet(1);
+    currentTracker.setActiveSheet(newHub);
+    currentTracker.moveActiveSheet(1);
   }
 
   // src/ui.js
   var ui_exports = {};
   __export(ui_exports, {
-    promptForImportUrl: () => promptForImportUrl,
+    showImportPrompt: () => showImportPrompt,
     showModal: () => showModal,
     showSidebar: () => showSidebar
   });
@@ -288,12 +316,12 @@ var App = (() => {
     <div class="sidebar-buttons">
       <div class="sidebar-action">
         <button id="update-tracker">Update tracker</button>
-        <p>Genshin Impact <code>v<?= gameVersion ?></code> achievements are available!</p>
+        <p>Genshin Impact <span>v<?= gameVersion ?></span> achievements are available!</p>
       </div>
 
       <div class="sidebar-action">
         <button id="import-progress">Import progress</button>
-        <p>Transfer achievement progress from your old Wonders of the World checklist.</p>
+        <p>Transfer your achievement progress from an old Wonders of the World checklist into the new tracker.</p>
       </div>
     </div>
 
@@ -338,7 +366,7 @@ var App = (() => {
   </main>
 
   <footer class="sidebar-footer">
-    <code>Version <?= bundleVersion ?></code>
+    <span>Version <?= bundleVersion ?></span>
   </footer>
 
 </body>
@@ -376,6 +404,18 @@ var App = (() => {
 </body>
 
 </html>
+
+<!-- if (oldTrackerId === TEMPLATE_TRACKER_ID) {
+  throw new Error('Oops! :( You pasted a link to the template. '
+    + 'Please try again and paste a link to your old checklist.')
+}
+
+const currentTracker = SpreadsheetApp.getActiveSpreadsheet()
+
+if (oldTrackerId === currentTracker.getId()) {
+  throw new Error('Oops! :( You pasted a link to your current tracker. '
+    + 'Please try again and paste a link to your old checklist.')
+} -->
 `;
 
   // src/ui.js
@@ -392,11 +432,11 @@ var App = (() => {
     const html = template.evaluate();
     SpreadsheetApp.getUi().showModalDialog(html, "Eternity");
   }
-  function promptForImportUrl() {
+  function showImportPrompt() {
     const ui = SpreadsheetApp.getUi();
     while (true) {
       const response = ui.prompt(
-        "Import progress",
+        "Transfer your progress",
         "Paste a link to your old Wonders of the World checklist:",
         ui.ButtonSet.OK_CANCEL
       );
@@ -406,7 +446,9 @@ var App = (() => {
       const trackerId = response.getResponseText().match(/\/d\/([^/]+)\//)?.[1];
       if (!trackerId) {
         ui.alert(
-          "Please paste a valid link.\n\nExample:\nhttps://docs.google.com/spreadsheets/d/18fYzPwB-_81qwOX1-mYxnEEMM5oo-vCeqhC8LIwxXWw/edit?usp=sharing"
+          `Couldn't recognize link :(`,
+          "Please paste a link to Google Sheets.\n\nExample:\nhttps://docs.google.com/spreadsheets/d/[ID]/edit?usp=sharing",
+          ui.ButtonSet.OK
         );
         continue;
       }
