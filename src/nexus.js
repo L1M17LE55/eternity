@@ -111,8 +111,8 @@ function showImportPrompt() {
   return app().ui.showImportPrompt()
 }
 
-function importProgress() {
-  return app().engine.importProgress()
+function importProgress(trackerId) {
+  return app().engine.importProgress(trackerId)
 }
 
 return {
