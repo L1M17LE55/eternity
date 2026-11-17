@@ -343,6 +343,7 @@ var App = (() => {
       background-repeat: no-repeat;
       padding: 16px;
       box-sizing: border-box;
+      border-radius: 0 0 16px 16px;
     }
 
     main {
