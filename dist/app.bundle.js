@@ -334,11 +334,6 @@ var App = (() => {
       flex-direction: column;
 
       background-image:
-        linear-gradient(135deg,
-          rgba(255, 255, 255, 0.22) 0%,
-          rgba(255, 255, 255, 0.05) 32%,
-          rgba(255, 255, 255, 0) 33%,
-          rgba(255, 255, 255, 0) 100%),
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
 
       background-size: cover;
@@ -350,6 +345,43 @@ var App = (() => {
 
       padding: 16px;
       box-sizing: border-box;
+
+      .glow-petal,
+      .glow-gold {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        /* Lets you click buttons right through them */
+        animation: pulseGlow 3s ease-in-out infinite alternate;
+      }
+
+      /* Pink sakura petal glow */
+      .glow-petal {
+        width: 6px;
+        height: 4px;
+        background: #ffd6f0;
+        box-shadow: 0 0 10px 4px rgba(255, 150, 220, 0.85);
+      }
+
+      /* Warm golden sparkle glow */
+      .glow-gold {
+        width: 4px;
+        height: 4px;
+        background: #fff3c4;
+        box-shadow: 0 0 12px 5px rgba(255, 200, 80, 0.85);
+      }
+
+      @keyframes pulseGlow {
+        0% {
+          opacity: 0.45;
+          transform: scale(0.9);
+        }
+
+        100% {
+          opacity: 1;
+          transform: scale(1.25);
+        }
+      }
     }
 
     main {
@@ -377,6 +409,11 @@ var App = (() => {
         <p>Transfer your achievement progress from your old Wonders of the World checklist.</p>
       </div>
     </div>
+
+    <span class="glow-petal" style="top: 15%; left: 28%;"></span>
+    <span class="glow-petal" style="top: 56%; left: 40%; animation-delay: 1s;"></span>
+    <span class="glow-gold" style="top: 68%; left: 18%; animation-delay: 0.5s;"></span>
+    <span class="glow-gold" style="top: 71%; left: 28%; animation-delay: 1.5s;"></span>
 
     <script>
       function disableButtons(disabled) {
