@@ -333,6 +333,7 @@ var App = (() => {
       margin: 0;
       display: flex;
       flex-direction: column;
+      background: url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp') center / cover no-repeat fixed;
     }
 
     main {
