@@ -36,7 +36,7 @@
       z-index: 1;
     }
 
-    /* .petal {
+    .petal {
       position: absolute;
       top: -15px;
       width: 7px;
@@ -45,9 +45,9 @@
       border-radius: 70% 30% 70% 30%;
       box-shadow: 0 0 8px 2px rgba(255, 150, 220, 0.75);
       animation: fallPetal linear infinite;
-    } */
+    }
 
-    .sparkle {
+    /* .sparkle {
       position: absolute;
       bottom: -10px;
       width: 3px;
@@ -56,9 +56,9 @@
       border-radius: 50%;
       box-shadow: 0 0 10px 3px rgba(255, 200, 70, 0.9);
       animation: floatSparkle ease-in-out infinite;
-    }
+    } */
 
-    /* @keyframes fallPetal {
+    @keyframes fallPetal {
       0% {
         transform: translateY(0) translateX(0) rotate(0deg);
         opacity: 0;
@@ -76,9 +76,9 @@
         transform: translateY(105vh) translateX(-35px) rotate(360deg);
         opacity: 0;
       }
-    } */
+    }
 
-    @keyframes floatSparkle {
+    /* @keyframes floatSparkle {
       0% {
         transform: translateY(0) scale(0.6);
         opacity: 0;
@@ -96,7 +96,7 @@
         transform: translateY(-95vh) translateX(20px) scale(1.2);
         opacity: 0;
       }
-    }
+    } */
 
     main {
       flex: 1;
@@ -129,23 +129,23 @@
     <script>
       const container = document.getElementById('particles')
 
-      // for (let i = 0; i < 12; i++) {
-      //   const p = document.createElement('span')
-      //   p.className = 'petal'
-      //   p.style.left = Math.random() * 100 + '%'
-      //   p.style.animationDuration = (7 + Math.random() * 6) + 's'
-      //   p.style.animationDelay = (-Math.random() * 12) + 's'
-      //   container.appendChild(p)
-      // }
-
-      for (let i = 0; i < 14; i++) {
-        const s = document.createElement('span')
-        s.className = 'sparkle'
-        s.style.left = Math.random() * 100 + '%'
-        s.style.animationDuration = (6 + Math.random() * 7) + 's'
-        s.style.animationDelay = (-Math.random() * 10) + 's'
-        container.appendChild(s)
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('span')
+        p.className = 'petal'
+        p.style.left = Math.random() * 100 + '%'
+        p.style.animationDuration = (7 + Math.random() * 6) + 's'
+        p.style.animationDelay = (-Math.random() * 12) + 's'
+        container.appendChild(p)
       }
+
+      // for (let i = 0; i < 14; i++) {
+      //   const s = document.createElement('span')
+      //   s.className = 'sparkle'
+      //   s.style.left = Math.random() * 100 + '%'
+      //   s.style.animationDuration = (6 + Math.random() * 7) + 's'
+      //   s.style.animationDelay = (-Math.random() * 10) + 's'
+      //   container.appendChild(s)
+      // }
     </script>
 
     <script>
