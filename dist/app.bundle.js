@@ -333,8 +333,10 @@ var App = (() => {
       display: flex;
       flex-direction: column;
       background-image:
-        linear-gradient(rgba(12, 18, 28, 0.45), rgba(12, 18, 28, 0.25)),
+        radial-gradient(circle at 75% 25%, rgba(255, 180, 230, 0.35), transparent 55%),
+        radial-gradient(circle at 35% 60%, rgba(255, 220, 150, 0.25), transparent 50%),
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
+      background-blend-mode: screen, screen, normal;
       background-size: cover;
       background-position: center bottom;
       background-repeat: no-repeat;
