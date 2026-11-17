@@ -326,6 +326,10 @@ var App = (() => {
     html,
     body {
       height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
 
     body {
@@ -343,10 +347,12 @@ var App = (() => {
 
     main {
       flex: 1;
+      z-index: 2;
     }
 
     .sidebar-footer {
       margin-top: auto;
+      z-index: 2;
     }
   </style>
 
@@ -427,13 +433,19 @@ var App = (() => {
 <body>
   <div id="particles"></div>
 
+  <header class="sidebar-header">
+    <h1>Eternity</h1>
+  </header>
+
   <main>
 
     <div class="sidebar-buttons">
 
       <div class="sidebar-action">
         <button id="update-tracker">Update tracker</button>
-        <p>Genshin Impact <span>v<?= gameVersion ?></span> achievements are available!</p>
+        <p>Genshin Impact v
+          <?= gameVersion ?> achievements are available!
+        </p>
       </div>
 
       <div class="sidebar-action">
@@ -446,7 +458,8 @@ var App = (() => {
   </main>
 
   <footer class="sidebar-footer">
-    <span>Version <?= bundleVersion ?></span>
+    Version
+    <?= bundleVersion ?>
   </footer>
 
   <script>
