@@ -103,6 +103,10 @@ function updateTracker() {
   return app().ui.showModal('updateTracker')
 }
 
+function executeUpdateTracker() {
+  return app().engine.updateTracker()
+}
+
 function showImportPrompt() {
   return app().ui.showImportPrompt()
 }
@@ -114,6 +118,7 @@ function importProgress(trackerId) {
 return {
   bootstrapApp,
   updateTracker,
+  executeUpdateTracker,
   showImportPrompt,
   importProgress
 }
