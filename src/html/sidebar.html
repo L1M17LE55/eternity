@@ -41,7 +41,7 @@
 
       <div class="sidebar-action">
         <button id="import-progress">Import progress</button>
-        <p>Transfer your achievement progress from an old Wonders of the World checklist into the new tracker.</p>
+        <p>Transfer your achievement progress from your old Wonders of the World checklist.</p>
       </div>
     </div>
 
@@ -79,7 +79,7 @@
             disableButtons(false)
             console.error(error)
           })
-          .invoke('showImportPrompt')
+          .invoke('importProgress')
       })
     </script>
 

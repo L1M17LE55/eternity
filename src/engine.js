@@ -13,7 +13,7 @@ export function updateTracker() {
 
   if (currentTracker.getId() === TEMPLATE_TRACKER_ID) {
     return {
-      task: 'update',
+      op: 'update',
       status: 'current-id-matches-template'
     }
   }
@@ -27,7 +27,7 @@ export function updateTracker() {
 
   if (tabsToUpdate.length === 0) {
     return {
-      task: 'update',
+      op: 'update',
       status: 'no-updates-available'
     }
   }
@@ -70,14 +70,14 @@ export function updateTracker() {
 
   if (untransferredAchievements.length > 0) {
     return {
-      task: 'update',
+      op: 'update',
       status: 'successful-with-warnings',
       warnings: untransferredAchievements
     }
   }
 
   return {
-    task: 'update',
+    op: 'update',
     status: 'successful'
   }
 }
@@ -85,7 +85,7 @@ export function updateTracker() {
 export function importProgress(sourceTrackerId) {
   if (sourceTrackerId === TEMPLATE_TRACKER_ID) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'source-id-matches-template'
     }
   }
@@ -94,7 +94,7 @@ export function importProgress(sourceTrackerId) {
 
   if (sourceTrackerId === currentTracker.getId()) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'source-id-matches-current'
     }
   }
@@ -106,7 +106,7 @@ export function importProgress(sourceTrackerId) {
 
   if (sourceTabs.length === 0) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'no-valid-tabs-in-source'
     }
   }
@@ -116,7 +116,7 @@ export function importProgress(sourceTrackerId) {
 
   if (currentTabs.length === 0) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'no-valid-tabs-in-current'
     }
   }
@@ -125,7 +125,7 @@ export function importProgress(sourceTrackerId) {
 
   if (tabsWithProgress.length === 0) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'no-import-data-available'
     }
   }
@@ -134,14 +134,14 @@ export function importProgress(sourceTrackerId) {
 
   if (untransferredAchievements.length > 0) {
     return {
-      task: 'import',
+      op: 'import',
       status: 'successful-with-warnings',
       warnings: untransferredAchievements
     }
   }
 
   return {
-    task: 'import',
+    op: 'import',
     status: 'successful'
   }
 }

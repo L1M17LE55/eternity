@@ -52,6 +52,6 @@ export function showImportPrompt() {
       continue
     }
 
-    return showModal('importProgress', trackerId)
+    return showModal('executeImportProgress', trackerId)
   }
 }
