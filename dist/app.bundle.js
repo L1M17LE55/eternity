@@ -42,7 +42,10 @@ var App = (() => {
   function updateTracker() {
     const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
     if (currentTracker.getId() === TEMPLATE_TRACKER_ID) {
-      return { status: "current-is-template" };
+      return {
+        task: "update",
+        status: "current-id-matches-template"
+      };
     }
     const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID);
     const currentTabMap = createTabMap_(currentTracker);
@@ -50,9 +53,12 @@ var App = (() => {
     const { missingTabs, outdatedTabs } = diffTabs_(currentTabMap, templateTabMap);
     const tabsToUpdate = [...missingTabs, ...outdatedTabs];
     if (tabsToUpdate.length === 0) {
-      return { status: "tracker-up-to-date" };
+      return {
+        task: "update",
+        status: "no-updates-available"
+      };
     }
-    const copiedTabMap = Object.fromEntries(
+    const newTabMap = Object.fromEntries(
       tabsToUpdate.map((tabName) => {
         const templateTab = templateTabMap[tabName];
         return [
@@ -63,65 +69,87 @@ var App = (() => {
     );
     const { tabsWithProgress, tabsWithoutProgress } = splitTabsByProgress_(outdatedTabs, currentTabMap);
     const trashBin = [...tabsWithoutProgress];
-    const skippedAchievements = [];
+    const untransferredAchievements = [];
     if (tabsWithProgress.length > 0) {
       backUpTabs_(tabsWithProgress, currentTabMap);
-      skippedAchievements.push(
-        ...transferAchievementProgress_(tabsWithProgress, currentTabMap, copiedTabMap)
+      untransferredAchievements.push(
+        ...transferAchievements_(tabsWithProgress, currentTabMap, newTabMap)
       );
       trashBin.push(
-        ...getBackupsToDelete_(tabsWithProgress, skippedAchievements)
+        ...getBackupsToDelete_(tabsWithProgress, untransferredAchievements)
       );
     }
     trashBin.forEach((tabName) => {
       currentTracker.deleteSheet(currentTabMap[tabName]);
     });
-    Object.entries(copiedTabMap).forEach(([tabName, tab]) => {
+    Object.entries(newTabMap).forEach(([tabName, tab]) => {
       tab.setName(tabName);
     });
     syncTabPosition_(currentTracker, templateTabMap);
     updateHub_(currentTracker, currentTabMap, templateTabMap);
-    if (skippedAchievements.length > 0) {
+    if (untransferredAchievements.length > 0) {
       return {
-        status: "tracker-updated-with-warnings",
-        skippedAchievements
+        task: "update",
+        status: "successful-with-warnings",
+        warnings: untransferredAchievements
       };
     }
-    return { status: "tracker-updated" };
+    return {
+      task: "update",
+      status: "successful"
+    };
   }
   function importProgress(sourceTrackerId) {
     if (sourceTrackerId === TEMPLATE_TRACKER_ID) {
-      return { status: "source-is-template" };
+      return {
+        task: "import",
+        status: "source-id-matches-template"
+      };
     }
     const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
     if (sourceTrackerId === currentTracker.getId()) {
-      return { status: "source-is-current" };
-    }
-    const templateTracker = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID);
-    const templateTabs = templateTracker.getSheets().map((tab) => tab.getName()).filter((tabName) => tabName !== HUB_NAME);
-    const sourceTracker = SpreadsheetApp.openById(sourceTrackerId);
-    const sourceTabMap = createTabMap_(sourceTracker, templateTabs);
-    const sourceTabs = Object.keys(sourceTabMap);
-    if (sourceTabs.length === 0) {
-      return { status: "no-valid-source-tabs" };
-    }
-    const currentTabMap = createTabMap_(currentTracker, sourceTabs);
-    const commonTabs = Object.keys(currentTabMap);
-    if (commonTabs.length === 0) {
-      return { status: "no-valid-common-tabs" };
-    }
-    const { tabsWithProgress } = splitTabsByProgress_(commonTabs, sourceTabMap);
-    if (tabsWithProgress.length === 0) {
-      return { status: "no-progress-to-import" };
-    }
-    const skippedAchievements = transferAchievementProgress_(tabsWithProgress, sourceTabMap, currentTabMap);
-    if (skippedAchievements.length > 0) {
       return {
-        status: "progress-imported-with-warnings",
-        skippedAchievements
+        task: "import",
+        status: "source-id-matches-current"
       };
     }
-    return { status: "progress-imported" };
+    const versionTabs = getVersionTabsFromTemplate_();
+    const sourceTracker = SpreadsheetApp.openById(sourceTrackerId);
+    const sourceTabMap = createTabMap_(sourceTracker, versionTabs);
+    const sourceTabs = Object.keys(sourceTabMap);
+    if (sourceTabs.length === 0) {
+      return {
+        task: "import",
+        status: "no-valid-tabs-in-source"
+      };
+    }
+    const currentTabMap = createTabMap_(currentTracker, sourceTabs);
+    const currentTabs = Object.keys(currentTabMap);
+    if (currentTabs.length === 0) {
+      return {
+        task: "import",
+        status: "no-valid-tabs-in-current"
+      };
+    }
+    const { tabsWithProgress } = splitTabsByProgress_(currentTabs, sourceTabMap);
+    if (tabsWithProgress.length === 0) {
+      return {
+        task: "import",
+        status: "no-import-data-available"
+      };
+    }
+    const untransferredAchievements = transferAchievements_(tabsWithProgress, sourceTabMap, currentTabMap);
+    if (untransferredAchievements.length > 0) {
+      return {
+        task: "import",
+        status: "successful-with-warnings",
+        warnings: untransferredAchievements
+      };
+    }
+    return {
+      task: "import",
+      status: "successful"
+    };
   }
   function createTabMap_(tracker, allowlist) {
     let tabEntries = tracker.getSheets().map((tab) => [tab.getName(), tab]);
@@ -129,6 +157,10 @@ var App = (() => {
       tabEntries = tabEntries.filter(([tabName]) => allowlist.includes(tabName));
     }
     return Object.fromEntries(tabEntries);
+  }
+  function getVersionTabsFromTemplate_() {
+    const versionTabs = SpreadsheetApp.openById(TEMPLATE_TRACKER_ID).getSheets().map((tab) => tab.getName()).filter((tabName) => tabName !== HUB_NAME);
+    return versionTabs;
   }
   function diffTabs_(currentTabMap, templateTabMap) {
     const missingTabs = [];
@@ -173,25 +205,29 @@ var App = (() => {
     };
   }
   function backUpTabs_(tabNames, tabMap) {
-    const timestamp = Math.floor(Date.now() / 1e3);
+    const timestamp = Utilities.formatDate(
+      /* @__PURE__ */ new Date(),
+      Session.getScriptTimeZone(),
+      "yyyy-MM-dd HH-mm-ss"
+    );
     tabNames.forEach((tabName) => {
       tabMap[tabName].setName(`${tabName} Backup ${timestamp}`);
     });
   }
-  function transferAchievementProgress_(tabNames, srcTabMap, destTabMap) {
-    const skippedAchievements = [];
+  function transferAchievements_(tabNames, srcTabMap, destTabMap) {
+    const untransferredAchievements = [];
     tabNames.forEach((tabName) => {
       const srcTab = srcTabMap[tabName];
       const destTab = destTabMap[tabName];
       const srcAchievements = getSrcAchievements_(srcTab);
       const destAchievements = getDestAchievements_(destTab);
-      const { matched, notMatched } = findMatches_(tabName, srcAchievements, destAchievements);
+      const { matched, unmatched } = findMatches_(tabName, srcAchievements, destAchievements);
       if (matched.length > 0) {
         destTab.getRangeList(matched).setValue(true);
       }
-      skippedAchievements.push(...notMatched);
+      untransferredAchievements.push(...unmatched);
     });
-    return skippedAchievements;
+    return untransferredAchievements;
   }
   function getSrcAchievements_(tab) {
     const columnsAB = tab.getRange(1, 1, tab.getLastRow(), 2).getValues();
@@ -219,27 +255,27 @@ var App = (() => {
   }
   function findMatches_(tabName, srcAchievements, destAchievements) {
     const matched = [];
-    const notMatched = [];
+    const unmatched = [];
     srcAchievements.forEach(({ achievement, srcRow }) => {
       const destRow = destAchievements.get(achievement);
       if (destRow !== void 0) {
         matched.push(`A${destRow}`);
       } else {
-        notMatched.push({
+        unmatched.push({
           tabName,
           achievement,
           srcRow
         });
       }
     });
-    return { matched, notMatched };
+    return { matched, unmatched };
   }
-  function getBackupsToDelete_(tabNames, skippedAchievements) {
-    const skippedTabs = new Set(
-      skippedAchievements.map(({ tabName }) => tabName)
+  function getBackupsToDelete_(backups, untransferredAchievements) {
+    const backupsToKeep = new Set(
+      untransferredAchievements.map(({ tabName }) => tabName)
     );
-    return tabNames.filter(
-      (tabName) => !skippedTabs.has(tabName)
+    return backups.filter(
+      (tabName) => !backupsToKeep.has(tabName)
     );
   }
   function syncTabPosition_(currentTracker, templateTabMap) {
