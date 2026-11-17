@@ -332,7 +332,15 @@ var App = (() => {
       margin: 0;
       display: flex;
       flex-direction: column;
-      background: url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp') center / cover no-repeat fixed;
+      background-image:
+        linear-gradient(rgba(12, 18, 28, 0.45), rgba(12, 18, 28, 0.25)),
+        url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
+      background-size: cover;
+      background-position: center bottom;
+      background-repeat: no-repeat;
+      image-rendering: -webkit-optimize-contrast;
+      padding: 16px;
+      box-sizing: border-box;
     }
 
     main {
