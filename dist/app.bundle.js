@@ -380,7 +380,7 @@ var App = (() => {
             disableButtons(false)
             console.error(error)
           })
-          .invoke('showModal', 'updateTracker')
+          .invoke('updateTracker')
       })
 
       const importButton = document.getElementById('import-progress')
