@@ -332,10 +332,8 @@ var App = (() => {
       margin: 0;
       display: flex;
       flex-direction: column;
-
       background-image:
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
-
       background-size: cover;
       background-position: center bottom;
       background-repeat: no-repeat;
@@ -343,92 +341,96 @@ var App = (() => {
       box-sizing: border-box;
     }
 
-    #particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      /* Ensures buttons remain 100% clickable */
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .petal {
-      position: absolute;
-      top: -15px;
-      width: 7px;
-      height: 5px;
-      background: #ffd6f0;
-      border-radius: 70% 30% 70% 30%;
-      box-shadow: 0 0 8px 2px rgba(255, 150, 220, 0.75);
-      animation: fallPetal linear infinite;
-    }
-
-    /* .sparkle {
-      position: absolute;
-      bottom: -10px;
-      width: 3px;
-      height: 3px;
-      background: #fff6cc;
-      border-radius: 50%;
-      box-shadow: 0 0 10px 3px rgba(255, 200, 70, 0.9);
-      animation: floatSparkle ease-in-out infinite;
-    } */
-
-    @keyframes fallPetal {
-      0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-
-      15% {
-        opacity: 0.95;
-      }
-
-      85% {
-        opacity: 0.85;
-      }
-
-      100% {
-        transform: translateY(105vh) translateX(-35px) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    /* @keyframes floatSparkle {
-      0% {
-        transform: translateY(0) scale(0.6);
-        opacity: 0;
-      }
-
-      25% {
-        opacity: 1;
-      }
-
-      75% {
-        opacity: 0.9;
-      }
-
-      100% {
-        transform: translateY(-95vh) translateX(20px) scale(1.2);
-        opacity: 0;
-      }
-    } */
-
     main {
       flex: 1;
     }
 
     .sidebar-footer {
       margin-top: auto;
-      padding-bottom: 8px;
+    }
+  </style>
+
+  <style>
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+      perspective: 700px;
+    }
+
+    .petal {
+      position: absolute;
+      top: -20px;
+      width: 11px;
+      height: 7px;
+      background: linear-gradient(135deg, #fff2f9 0%, #ffc2e6 65%, #f495ce 100%);
+      border-radius: 80% 15% 75% 25% / 75% 25% 80% 15%;
+      box-shadow: 0 0 6px 1px rgba(255, 175, 230, 0.4);
+      transform-style: preserve-3d;
+
+      animation:
+        fallDown linear infinite,
+        horizontalDrift ease-in-out infinite alternate,
+        tumble3D ease-in-out infinite alternate;
+      will-change: transform, opacity;
+    }
+
+    @keyframes fallDown {
+      0% {
+        transform: translate3d(0, -30px, 0);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: var(--max-opacity, 0.8);
+      }
+
+      85% {
+        opacity: var(--max-opacity, 0.75);
+      }
+
+      100% {
+        transform: translate3d(var(--wind-drift, 80px), 108vh, 0);
+        opacity: 0;
+      }
+    }
+
+    @keyframes horizontalDrift {
+      0% {
+        margin-left: -12px;
+      }
+
+      100% {
+        margin-left: 12px;
+      }
+    }
+
+    @keyframes tumble3D {
+      0% {
+        rotate: 0.8 0.5 0.2 -28deg;
+      }
+
+      50% {
+        rotate: 0.3 0.9 -0.2 35deg;
+      }
+
+      100% {
+        rotate: -0.6 0.4 0.5 75deg;
+      }
     }
   </style>
 
 </head>
 
 <body>
+  <div id="particles"></div>
+
   <main>
+
     <div class="sidebar-buttons">
+
       <div class="sidebar-action">
         <button id="update-tracker">Update tracker</button>
         <p>Genshin Impact <span>v<?= gameVersion ?></span> achievements are available!</p>
@@ -438,75 +440,94 @@ var App = (() => {
         <button id="import-progress">Import progress</button>
         <p>Transfer your achievement progress from your old Wonders of the World checklist.</p>
       </div>
+
     </div>
-
-    <div id="particles"></div>
-
-    <script>
-      const container = document.getElementById('particles')
-
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('span')
-        p.className = 'petal'
-        p.style.left = Math.random() * 100 + '%'
-        p.style.animationDuration = (7 + Math.random() * 6) + 's'
-        p.style.animationDelay = (-Math.random() * 12) + 's'
-        container.appendChild(p)
-      }
-
-      // for (let i = 0; i < 14; i++) {
-      //   const s = document.createElement('span')
-      //   s.className = 'sparkle'
-      //   s.style.left = Math.random() * 100 + '%'
-      //   s.style.animationDuration = (6 + Math.random() * 7) + 's'
-      //   s.style.animationDelay = (-Math.random() * 10) + 's'
-      //   container.appendChild(s)
-      // }
-    </script>
-
-    <script>
-      function disableButtons(disabled) {
-        document.querySelectorAll('button').forEach((button) => {
-          button.disabled = disabled
-        })
-      }
-
-      const updateButton = document.getElementById('update-tracker')
-      updateButton.addEventListener('click', () => {
-        disableButtons(true)
-
-        google.script.run
-          .withSuccessHandler(() => {
-            disableButtons(false)
-          })
-          .withFailureHandler((error) => {
-            disableButtons(false)
-            console.error(error)
-          })
-          .invoke('updateTracker')
-      })
-
-      const importButton = document.getElementById('import-progress')
-      importButton.addEventListener('click', () => {
-        disableButtons(true)
-
-        google.script.run
-          .withSuccessHandler(() => {
-            disableButtons(false)
-          })
-          .withFailureHandler((error) => {
-            disableButtons(false)
-            console.error(error)
-          })
-          .invoke('importProgress')
-      })
-    </script>
 
   </main>
 
   <footer class="sidebar-footer">
     <span>Version <?= bundleVersion ?></span>
   </footer>
+
+  <script>
+    function disableButtons(disabled) {
+      document.querySelectorAll('button').forEach((button) => {
+        button.disabled = disabled
+      })
+    }
+
+    const updateButton = document.getElementById('update-tracker')
+    updateButton.addEventListener('click', () => {
+      disableButtons(true)
+
+      google.script.run
+        .withSuccessHandler(() => {
+          disableButtons(false)
+        })
+        .withFailureHandler((error) => {
+          disableButtons(false)
+          console.error(error)
+        })
+        .invoke('updateTracker')
+    })
+
+    const importButton = document.getElementById('import-progress')
+    importButton.addEventListener('click', () => {
+      disableButtons(true)
+
+      google.script.run
+        .withSuccessHandler(() => {
+          disableButtons(false)
+        })
+        .withFailureHandler((error) => {
+          disableButtons(false)
+          console.error(error)
+        })
+        .invoke('importProgress')
+    })
+  </script>
+
+  <script>
+    const container = document.getElementById('particles')
+    const petalCount = 9
+
+    for (let i = 0; i < petalCount; i++) {
+      const p = document.createElement('span')
+      p.className = 'petal'
+
+      p.style.left = (-15 + Math.random() * 110) + '%'
+
+      const depth = Math.random()
+
+      const scale = (0.55 + depth * 0.6).toFixed(2)
+      p.style.scale = scale
+      p.style.setProperty('--max-opacity', (0.35 + depth * 0.45).toFixed(2))
+
+      if (depth < 0.4) {
+        p.style.filter = 'blur(1px)'
+      }
+
+      const fallSpeed = (24 - depth * 6 + Math.random() * 4).toFixed(1) + 's'
+      const driftSpeed = (4.5 + Math.random() * 3).toFixed(1) + 's'
+      const tumbleSpeed = (4.0 + Math.random() * 3.5).toFixed(1) + 's'
+
+      p.style.animationDuration = \`\${fallSpeed}, \${driftSpeed}, \${tumbleSpeed}\`
+
+      const fallDelay = (-Math.random() * 24).toFixed(1) + 's'
+      const driftDelay = (-Math.random() * 7).toFixed(1) + 's'
+      const tumbleDelay = (-Math.random() * 7).toFixed(1) + 's'
+      p.style.animationDelay = \`\${fallDelay}, \${driftDelay}, \${tumbleDelay}\`
+
+      const windDrift = Math.round(45 + depth * 45 + Math.random() * 25) + 'px'
+      p.style.setProperty('--wind-drift', windDrift)
+
+      const r1 = Math.round(65 + Math.random() * 20)
+      const r2 = Math.round(15 + Math.random() * 20)
+      p.style.borderRadius = \`\${r1}% \${r2}% \${r1}% \${r2}%\`
+
+      container.appendChild(p)
+    }
+  </script>
 
 </body>
 
