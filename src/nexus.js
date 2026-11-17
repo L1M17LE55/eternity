@@ -100,7 +100,7 @@ function purgeNexusAndUpdate_() {
 }
 
 function updateTracker() {
-  return app().ui.showModal('updateTracker')
+  return app().ui.showModal('executeUpdateTracker')
 }
 
 function executeUpdateTracker() {
