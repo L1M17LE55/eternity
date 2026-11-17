@@ -459,7 +459,7 @@ if (oldTrackerId === currentTracker.getId()) {
     const template = HtmlService.createTemplate(sidebar_default);
     template.bundleVersion = metadata_default.bundleVersion;
     template.gameVersion = metadata_default.gameVersion;
-    const html = template.evaluate().setTitle("Eternity Alpha");
+    const html = template.evaluate().setTitle("\u200B");
     SpreadsheetApp.getUi().showSidebar(html);
   }
   function showModal(method, ...args) {
