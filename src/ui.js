@@ -7,7 +7,7 @@ export function showSidebar() {
   template.bundleVersion = metadata.bundleVersion
   template.gameVersion = metadata.gameVersion
 
-  const html = template.evaluate().setTitle('Eternity Alpha')
+  const html = template.evaluate().setTitle('\u200B')
   SpreadsheetApp.getUi().showSidebar(html)
 }
 
