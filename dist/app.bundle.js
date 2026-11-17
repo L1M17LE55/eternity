@@ -339,48 +339,80 @@ var App = (() => {
       background-size: cover;
       background-position: center bottom;
       background-repeat: no-repeat;
-
-      /* Subtle top edge highlight like polished glass */
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
-
       padding: 16px;
       box-sizing: border-box;
+    }
 
-      .glow-petal,
-      .glow-gold {
-        position: absolute;
-        border-radius: 50%;
-        pointer-events: none;
-        /* Lets you click buttons right through them */
-        animation: pulseGlow 3s ease-in-out infinite alternate;
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      /* Ensures buttons remain 100% clickable */
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Falling pink sakura petals */
+    .petal {
+      position: absolute;
+      top: -15px;
+      width: 7px;
+      height: 5px;
+      background: #ffd6f0;
+      border-radius: 70% 30% 70% 30%;
+      box-shadow: 0 0 8px 2px rgba(255, 150, 220, 0.75);
+      animation: fallPetal linear infinite;
+    }
+
+    /* Rising/floating golden fireflies */
+    .sparkle {
+      position: absolute;
+      bottom: -10px;
+      width: 3px;
+      height: 3px;
+      background: #fff6cc;
+      border-radius: 50%;
+      box-shadow: 0 0 10px 3px rgba(255, 200, 70, 0.9);
+      animation: floatSparkle ease-in-out infinite;
+    }
+
+    @keyframes fallPetal {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
       }
 
-      /* Pink sakura petal glow */
-      .glow-petal {
-        width: 6px;
-        height: 4px;
-        background: #ffd6f0;
-        box-shadow: 0 0 10px 4px rgba(255, 150, 220, 0.85);
+      15% {
+        opacity: 0.95;
       }
 
-      /* Warm golden sparkle glow */
-      .glow-gold {
-        width: 4px;
-        height: 4px;
-        background: #fff3c4;
-        box-shadow: 0 0 12px 5px rgba(255, 200, 80, 0.85);
+      85% {
+        opacity: 0.85;
       }
 
-      @keyframes pulseGlow {
-        0% {
-          opacity: 0.45;
-          transform: scale(0.9);
-        }
+      100% {
+        transform: translateY(105vh) translateX(-35px) rotate(360deg);
+        opacity: 0;
+      }
+    }
 
-        100% {
-          opacity: 1;
-          transform: scale(1.25);
-        }
+    @keyframes floatSparkle {
+      0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+      }
+
+      25% {
+        opacity: 1;
+      }
+
+      75% {
+        opacity: 0.9;
+      }
+
+      100% {
+        transform: translateY(-95vh) translateX(20px) scale(1.2);
+        opacity: 0;
       }
     }
 
@@ -410,10 +442,31 @@ var App = (() => {
       </div>
     </div>
 
-    <span class="glow-petal" style="top: 15%; left: 28%;"></span>
-    <span class="glow-petal" style="top: 56%; left: 40%; animation-delay: 1s;"></span>
-    <span class="glow-gold" style="top: 68%; left: 18%; animation-delay: 0.5s;"></span>
-    <span class="glow-gold" style="top: 71%; left: 28%; animation-delay: 1.5s;"></span>
+    <div id="particles"></div>
+
+    <script>
+      const container = document.getElementById('particles')
+
+      // Generate 12 drifting sakura petals
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('span')
+        p.className = 'petal'
+        p.style.left = Math.random() * 100 + '%'
+        p.style.animationDuration = (7 + Math.random() * 6) + 's'
+        p.style.animationDelay = (-Math.random() * 12) + 's'
+        container.appendChild(p)
+      }
+
+      // Generate 14 floating golden sparkles
+      for (let i = 0; i < 14; i++) {
+        const s = document.createElement('span')
+        s.className = 'sparkle'
+        s.style.left = Math.random() * 100 + '%'
+        s.style.animationDuration = (6 + Math.random() * 7) + 's'
+        s.style.animationDelay = (-Math.random() * 10) + 's'
+        container.appendChild(s)
+      }
+    </script>
 
     <script>
       function disableButtons(disabled) {
