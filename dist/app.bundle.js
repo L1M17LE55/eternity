@@ -325,15 +325,12 @@ var App = (() => {
   <style>
     html,
     body {
-      height: 100%;
+      height: 100dvh;
       width: 100%;
-      margin: 0;
-      padding: 0;
       overflow: hidden;
     }
 
     body {
-      margin: 0;
       display: flex;
       flex-direction: column;
       background-image:
@@ -343,7 +340,6 @@ var App = (() => {
       background-repeat: no-repeat;
       padding: 16px;
       box-sizing: border-box;
-      border-radius: 0 0 16px 16px;
     }
 
     main {
