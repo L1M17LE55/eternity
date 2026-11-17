@@ -36,8 +36,7 @@
       z-index: 1;
     }
 
-    /* Falling pink sakura petals */
-    .petal {
+    /* .petal {
       position: absolute;
       top: -15px;
       width: 7px;
@@ -46,9 +45,8 @@
       border-radius: 70% 30% 70% 30%;
       box-shadow: 0 0 8px 2px rgba(255, 150, 220, 0.75);
       animation: fallPetal linear infinite;
-    }
+    } */
 
-    /* Rising/floating golden fireflies */
     .sparkle {
       position: absolute;
       bottom: -10px;
@@ -60,7 +58,7 @@
       animation: floatSparkle ease-in-out infinite;
     }
 
-    @keyframes fallPetal {
+    /* @keyframes fallPetal {
       0% {
         transform: translateY(0) translateX(0) rotate(0deg);
         opacity: 0;
@@ -78,7 +76,7 @@
         transform: translateY(105vh) translateX(-35px) rotate(360deg);
         opacity: 0;
       }
-    }
+    } */
 
     @keyframes floatSparkle {
       0% {
@@ -131,17 +129,15 @@
     <script>
       const container = document.getElementById('particles')
 
-      // Generate 12 drifting sakura petals
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('span')
-        p.className = 'petal'
-        p.style.left = Math.random() * 100 + '%'
-        p.style.animationDuration = (7 + Math.random() * 6) + 's'
-        p.style.animationDelay = (-Math.random() * 12) + 's'
-        container.appendChild(p)
-      }
+      // for (let i = 0; i < 12; i++) {
+      //   const p = document.createElement('span')
+      //   p.className = 'petal'
+      //   p.style.left = Math.random() * 100 + '%'
+      //   p.style.animationDuration = (7 + Math.random() * 6) + 's'
+      //   p.style.animationDelay = (-Math.random() * 12) + 's'
+      //   container.appendChild(p)
+      // }
 
-      // Generate 14 floating golden sparkles
       for (let i = 0; i < 14; i++) {
         const s = document.createElement('span')
         s.className = 'sparkle'
