@@ -320,7 +320,6 @@ var App = (() => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
   <title>Eternity Sidebar</title>
 
   <style>
