@@ -43,7 +43,7 @@ var App = (() => {
     const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
     if (currentTracker.getId() === TEMPLATE_TRACKER_ID) {
       return {
-        task: "update",
+        op: "update",
         status: "current-id-matches-template"
       };
     }
@@ -54,7 +54,7 @@ var App = (() => {
     const tabsToUpdate = [...missingTabs, ...outdatedTabs];
     if (tabsToUpdate.length === 0) {
       return {
-        task: "update",
+        op: "update",
         status: "no-updates-available"
       };
     }
@@ -89,27 +89,27 @@ var App = (() => {
     updateHub_(currentTracker, currentTabMap, templateTabMap);
     if (untransferredAchievements.length > 0) {
       return {
-        task: "update",
+        op: "update",
         status: "successful-with-warnings",
         warnings: untransferredAchievements
       };
     }
     return {
-      task: "update",
+      op: "update",
       status: "successful"
     };
   }
   function importProgress(sourceTrackerId) {
     if (sourceTrackerId === TEMPLATE_TRACKER_ID) {
       return {
-        task: "import",
+        op: "import",
         status: "source-id-matches-template"
       };
     }
     const currentTracker = SpreadsheetApp.getActiveSpreadsheet();
     if (sourceTrackerId === currentTracker.getId()) {
       return {
-        task: "import",
+        op: "import",
         status: "source-id-matches-current"
       };
     }
@@ -119,7 +119,7 @@ var App = (() => {
     const sourceTabs = Object.keys(sourceTabMap);
     if (sourceTabs.length === 0) {
       return {
-        task: "import",
+        op: "import",
         status: "no-valid-tabs-in-source"
       };
     }
@@ -127,27 +127,27 @@ var App = (() => {
     const currentTabs = Object.keys(currentTabMap);
     if (currentTabs.length === 0) {
       return {
-        task: "import",
+        op: "import",
         status: "no-valid-tabs-in-current"
       };
     }
     const { tabsWithProgress } = splitTabsByProgress_(currentTabs, sourceTabMap);
     if (tabsWithProgress.length === 0) {
       return {
-        task: "import",
+        op: "import",
         status: "no-import-data-available"
       };
     }
     const untransferredAchievements = transferAchievements_(tabsWithProgress, sourceTabMap, currentTabMap);
     if (untransferredAchievements.length > 0) {
       return {
-        task: "import",
+        op: "import",
         status: "successful-with-warnings",
         warnings: untransferredAchievements
       };
     }
     return {
-      task: "import",
+      op: "import",
       status: "successful"
     };
   }
@@ -357,7 +357,7 @@ var App = (() => {
 
       <div class="sidebar-action">
         <button id="import-progress">Import progress</button>
-        <p>Transfer your achievement progress from an old Wonders of the World checklist into the new tracker.</p>
+        <p>Transfer your achievement progress from your old Wonders of the World checklist.</p>
       </div>
     </div>
 
@@ -395,7 +395,7 @@ var App = (() => {
             disableButtons(false)
             console.error(error)
           })
-          .invoke('showImportPrompt')
+          .invoke('importProgress')
       })
     </script>
 
@@ -494,7 +494,7 @@ if (oldTrackerId === currentTracker.getId()) {
         ui.alert(error.message);
         continue;
       }
-      return showModal("importProgress", trackerId);
+      return showModal("executeImportProgress", trackerId);
     }
   }
   return __toCommonJS(app_exports);
