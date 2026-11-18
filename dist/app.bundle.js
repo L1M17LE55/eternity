@@ -325,7 +325,7 @@ var App = (() => {
   <style>
     html,
     body {
-      height: 100dvh;
+      height: 100%;
       width: 100%;
       overflow: hidden;
     }
@@ -333,13 +333,14 @@ var App = (() => {
     body {
       display: flex;
       flex-direction: column;
+      box-sizing: border-box;
+      padding: 16px;
       background-image:
+
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
       background-size: cover;
       background-position: center bottom;
       background-repeat: no-repeat;
-      padding: 16px;
-      box-sizing: border-box;
     }
 
     main {
