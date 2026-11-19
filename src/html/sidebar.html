@@ -46,7 +46,7 @@
       letter-spacing: 0.28em;
       white-space: nowrap;
       color: #ffffff;
-      text-shadow: 0 0 6px #ffffff, ;
+      text-shadow: 0 0 6px #ffffff;
     }
 
     .title-initial {
@@ -72,17 +72,15 @@
     /* BUTTONS */
     /* ------- */
     .action button {
-      /* 1. Layout & Box Model */
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      width: 80%;
+      width: auto;
       margin: 0 auto;
-      padding: 6px 0 0 0;
+      padding: 4px 0 0 0;
       border: none;
 
-      /* 2. Typography */
       font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 13px;
       font-weight: 500;
@@ -90,7 +88,6 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
 
-      /* 3. Visuals & Effects */
       color: #ffffff;
       background: transparent;
       text-shadow: 0 0 6px rgba(255, 255, 255, 1);
@@ -100,10 +97,10 @@
 
     .action button::after {
       content: "";
-      width: 80%;
+      width: 175px;
       height: 2px;
       transform: scaleY(0.5);
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.75);
       box-shadow: 0 0 6px rgba(255, 255, 255, 1);
       transition: 0.25s ease;
     }
@@ -115,14 +112,24 @@
     }
 
     .action button:hover::after {
-      width: 100%;
+      width: 225px;
+    }
+
+    .action button:disabled {
+      color: rgba(255, 255, 255, 0.5);
+      text-shadow: none;
+      cursor: wait;
+    }
+
+    .action button:disabled::after {
+      width: 150px;
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: none;
     }
 
     .action-desc {
-      /* 1. Box Model */
-      margin: 12px 24px 0 24px;
+      margin: 8px 24px 0 24px;
 
-      /* 2. Typography */
       font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 12px;
       font-weight: 400;
@@ -130,7 +137,6 @@
       letter-spacing: 0.12em;
       text-align: left;
 
-      /* 3. Visuals & Effects */
       color: rgba(255, 255, 255, 0.8);
       text-shadow: -2px 2px 4px rgba(0, 0, 0, 1);
     }
