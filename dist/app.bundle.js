@@ -2,7 +2,7 @@
 {
   "nexusVersion": "1.0.0-alpha.1",
   "bundleVersion": "1.0.0-alpha.1",
-  "gameVersion": "7.1"
+  "trackerVersion": "7.2.0"
 }
 */
 var App = (() => {
@@ -310,7 +310,7 @@ var App = (() => {
   var metadata_default = {
     nexusVersion: "1.0.0-alpha.1",
     bundleVersion: "1.0.0-alpha.1",
-    gameVersion: "7.1"
+    trackerVersion: "7.2.0"
   };
 
   // src/html/sidebar.html
@@ -336,8 +336,8 @@ var App = (() => {
 
     html,
     body {
-      height: 100%;
       width: 100%;
+      height: 100%;
       overflow: hidden;
     }
 
@@ -352,9 +352,7 @@ var App = (() => {
       background-repeat: no-repeat;
     }
 
-    /* ------ */
     /* HEADER */
-    /* ------ */
     header h1 {
       display: flex;
       justify-content: center;
@@ -383,11 +381,10 @@ var App = (() => {
       flex-direction: column;
       gap: 36px;
       margin-top: 24px;
+      z-index: 1;
     }
 
-    /* ------- */
     /* BUTTONS */
-    /* ------- */
     .action button {
       display: flex;
       flex-direction: column;
@@ -416,18 +413,18 @@ var App = (() => {
       content: "";
       width: 100%;
       height: 2px;
-      transform: scaleY(0.5);
       background: rgba(255, 255, 255, 0.75);
       box-shadow: 0 0 6px rgba(255, 255, 255, 1);
       mask-image: linear-gradient(to right,
           transparent 0%,
-          black 15%,
-          black 85%,
+          black 20%,
+          black 80%,
           transparent 100%);
-      mask-size: 150% 100%;
+      mask-size: 160% 100%;
       mask-position: center;
       mask-repeat: no-repeat;
       transition: 0.25s ease;
+      transform: scaleY(0.5);
     }
 
     .action button:not(:disabled):hover {
@@ -437,7 +434,7 @@ var App = (() => {
     }
 
     .action button:not(:disabled):hover::after {
-      width: 150%;
+      width: 160%;
       mask-size: 100%;
     }
 
@@ -450,44 +447,36 @@ var App = (() => {
     .action button:disabled::after {
       width: 100%;
       background: rgba(255, 255, 255, 0.25);
-      filter: none;
+      box-shadow: none;
     }
 
     .action-desc {
-      margin-top: 12px;
-      padding: 12px 20px;
-
-      border-radius: 0px;
+      margin-top: 8px;
+      padding: 8px 20px;
       background: rgba(0, 0, 0, 0.1);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      border: none;
+      backdrop-filter: blur(4px);
       mask-image: linear-gradient(to right,
           transparent 0%,
           black 10%,
           black 90%,
           transparent 100%);
-
       font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 12px;
       font-weight: 400;
       line-height: 1.2;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.08em;
       text-align: center;
-
       color: rgba(255, 255, 255, 0.8);
       text-shadow: -2px 2px 4px rgba(0, 0, 0, 1);
     }
 
-    /* ------ */
     /* FOOTER */
-    /* ------ */
     footer {
       margin-top: auto;
-      text-align: center;
+      font-family: 'Orbitron', sans-serif;
       font-size: 8px;
       letter-spacing: 0.2em;
-      font-family: 'Orbitron', sans-serif;
+      text-align: center;
       text-transform: uppercase;
       color: #ffffff;
     }
@@ -499,7 +488,7 @@ var App = (() => {
       inset: 0;
       pointer-events: none;
       overflow: hidden;
-      z-index: 1;
+      z-index: 0;
       perspective: 700px;
     }
 
@@ -514,13 +503,13 @@ var App = (() => {
       transform-style: preserve-3d;
 
       animation:
-        fallDown linear infinite,
-        horizontalDrift ease-in-out infinite alternate,
-        tumble3D ease-in-out infinite alternate;
+        fall linear infinite,
+        drift ease-in-out infinite alternate,
+        tumble ease-in-out infinite alternate;
       will-change: transform, opacity;
     }
 
-    @keyframes fallDown {
+    @keyframes fall {
       0% {
         transform: translate3d(0, -30px, 0);
         opacity: 0;
@@ -540,7 +529,7 @@ var App = (() => {
       }
     }
 
-    @keyframes horizontalDrift {
+    @keyframes drift {
       0% {
         margin-left: -12px;
       }
@@ -550,7 +539,7 @@ var App = (() => {
       }
     }
 
-    @keyframes tumble3D {
+    @keyframes tumble {
       0% {
         rotate: 0.8 0.5 0.2 -28deg;
       }
@@ -578,18 +567,24 @@ var App = (() => {
 
     <div class="action">
       <button id="update-tracker">Update tracker</button>
-      <p class="action-desc">Genshin Impact v<?= gameVersion ?> achievements are available!</p>
+      <p class="action-desc">Click "Update tracker" to get the latest changes from the template.<br>
+      Current template version: <?= templateVersion ?></p>
+    </div>
     </div>
 
     <div class="action">
       <button id="import-progress">Import progress</button>
-      <p class="action-desc">Transfer achievement progress from your old Wonders of the World checklist.</p>
+      <p
+        class="action-desc">Click "Import progress" to transfer your achievement progress from an old Wonders of the World checklist.</p>
     </div>
 
   </main>
 
   <footer>
-    <small>Version <?= bundleVersion ?></small>
+    <small>
+      Version <?= bundleVersion ?><br>
+      by L1M17LE55
+    </small>
   </footer>
 
   <script>
@@ -628,6 +623,15 @@ var App = (() => {
         })
         .invoke('importProgress')
     })
+  </script>
+
+  <script>
+    const currentVersion = document.getElementById('current-version');
+    const availableVersion = document.getElementById('available-version');
+
+    if (availableVersion.textContent.trim() > currentVersion.textContent.trim()) {
+      availableVersion.classList.add('version-newer');
+    }
   </script>
 
   <script>
@@ -725,7 +729,7 @@ if (oldTrackerId === currentTracker.getId()) {
   function showSidebar() {
     const template = HtmlService.createTemplate(sidebar_default);
     template.bundleVersion = metadata_default.bundleVersion;
-    template.gameVersion = metadata_default.gameVersion;
+    template.trackerVersion = metadata_default.trackerVersion;
     const html = template.evaluate().setTitle("\u200B");
     SpreadsheetApp.getUi().showSidebar(html);
   }
