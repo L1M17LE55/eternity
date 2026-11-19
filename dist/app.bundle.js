@@ -346,10 +346,6 @@ var App = (() => {
       flex-direction: column;
       padding: 24px 16px;
       background-image:
-        linear-gradient(to bottom,
-          rgba(10, 14, 24, 0.5) 0%,
-          rgba(10, 14, 24, 0.3) 50%,
-          rgba(10, 14, 24, 0) 75%),
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
       background-size: cover;
       background-position: center bottom;
@@ -423,17 +419,26 @@ var App = (() => {
       transform: scaleY(0.5);
       background: rgba(255, 255, 255, 0.75);
       box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+      mask-image: linear-gradient(to right,
+          transparent 0%,
+          black 15%,
+          black 85%,
+          transparent 100%);
+      mask-size: 150% 100%;
+      mask-position: center;
+      mask-repeat: no-repeat;
       transition: 0.25s ease;
     }
 
-    .action button:hover {
+    .action button:not(:disabled):hover {
       text-shadow:
         0 0 6px rgba(255, 255, 255, 1),
         0 0 12px rgba(255, 255, 255, 1);
     }
 
-    .action button:hover::after {
-      width: 135%;
+    .action button:not(:disabled):hover::after {
+      width: 150%;
+      mask-size: 100%;
     }
 
     .action button:disabled {
@@ -443,20 +448,32 @@ var App = (() => {
     }
 
     .action button:disabled::after {
-      width: 75%;
+      width: 100%;
       background: rgba(255, 255, 255, 0.25);
-      box-shadow: none;
+      filter: none;
     }
 
     .action-desc {
-      margin: 8px 24px 0 24px;
+      margin-top: 12px;
+      padding: 12px 20px;
+
+      border-radius: 0px;
+      background: rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      border: none;
+      mask-image: linear-gradient(to right,
+          transparent 0%,
+          black 10%,
+          black 90%,
+          transparent 100%);
 
       font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 12px;
       font-weight: 400;
       line-height: 1.2;
       letter-spacing: 0.12em;
-      text-align: left;
+      text-align: center;
 
       color: rgba(255, 255, 255, 0.8);
       text-shadow: -2px 2px 4px rgba(0, 0, 0, 1);
@@ -572,8 +589,7 @@ var App = (() => {
   </main>
 
   <footer>
-    <small>Version <?= bundleVersion ?>
-    </small>
+    <small>Version <?= bundleVersion ?></small>
   </footer>
 
   <script>
