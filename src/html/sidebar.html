@@ -8,7 +8,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel&family=Cinzel+Decorative&family=Zen+Kaku+Gothic+New:wght@400;500&family=Orbitron&display=swap">
 
   <style>
     * {
@@ -22,126 +23,128 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      color: #ffffff;
     }
 
     body {
       display: flex;
       flex-direction: column;
-      padding: 24px 18px;
-      background-image: url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
+      padding: 24px 16px;
+      background-image:
+        url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
       background-size: cover;
       background-position: center bottom;
       background-repeat: no-repeat;
     }
 
-    .sidebar-header {
-      z-index: 2;
-      margin-bottom: 12px;
-    }
-
-    .sidebar-header h1 {
-      font-family: 'Cinzel Decorative', serif;
+    /* ------ */
+    /* HEADER */
+    /* ------ */
+    header h1 {
+      display: flex;
+      align-items: center;
       font-weight: 400;
       letter-spacing: 0.28em;
-      line-height: 1.2;
-      color: #ffffff;
-      text-shadow:
-        0 0 6px #ffffff;
       white-space: nowrap;
+      color: #ffffff;
+      text-shadow: 0 0 6px #ffffff, ;
     }
 
-    .sidebar-header h1 .e {
+    .title-initial {
       font-family: 'Cinzel', serif;
       font-size: 72px;
     }
 
-    .sidebar-header h1 .ternity {
-      display: inline-block;
-      position: relative;
-      top: -12px;
+    .title-rest {
       margin-left: -4px;
+      font-family: 'Cinzel Decorative', serif;
       font-size: 32px;
     }
 
     main {
       flex: 1;
-      z-index: 2;
-    }
-
-    .sidebar-buttons {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 36px;
+      margin-top: 24px;
     }
 
-    .sidebar-action {
+    /* ------- */
+    /* BUTTONS */
+    /* ------- */
+    .action button {
+      /* 1. Layout & Box Model */
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-    }
-
-    .sidebar-action button {
-      width: 100%;
-      padding: 11px 18px;
-      border-radius: 999px;
+      align-items: center;
+      gap: 4px;
+      width: 80%;
+      margin: 0 auto;
+      padding: 6px 0 0 0;
       border: none;
-      background: rgba(255, 194, 230, 0.14);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: #fff7fc;
+
+      /* 2. Typography */
+      font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 13px;
       font-weight: 500;
-      letter-spacing: 0.08em;
+      line-height: 18px;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      text-shadow:
-        0 0 8px rgba(255, 130, 205, 0.9),
-        0 0 16px rgba(244, 114, 182, 0.6);
-      box-shadow: 0 0 14px rgba(255, 145, 210, 0.15);
+
+      /* 3. Visuals & Effects */
+      color: #ffffff;
+      background: transparent;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 1);
       cursor: pointer;
-      transition: background 0.2s ease, box-shadow 0.2s ease, text-shadow 0.2s ease, transform 0.15s ease;
+      transition: 0.25s ease;
     }
 
-    .sidebar-action button:hover:not(:disabled) {
-      background: rgba(255, 180, 225, 0.25);
-      box-shadow: 0 0 22px rgba(255, 130, 205, 0.5);
+    .action button::after {
+      content: "";
+      width: 80%;
+      height: 2px;
+      transform: scaleY(0.5);
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 1);
+      transition: 0.25s ease;
+    }
+
+    .action button:hover {
       text-shadow:
-        0 0 10px rgba(255, 150, 215, 1),
-        0 0 22px rgba(244, 114, 182, 0.85);
+        0 0 6px rgba(255, 255, 255, 1),
+        0 0 12px rgba(255, 255, 255, 1);
     }
 
-    .sidebar-action button:active:not(:disabled) {
-      background: rgba(255, 180, 225, 0.34);
-      transform: scale(0.98);
+    .action button:hover::after {
+      width: 100%;
     }
 
-    .sidebar-action button:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
+    .action-desc {
+      /* 1. Box Model */
+      margin: 12px 24px 0 24px;
 
-    .sidebar-action p {
-      margin-top: 9px;
-      padding: 0 6px;
+      /* 2. Typography */
+      font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 12px;
-      line-height: 1.45;
-      color: #fff5fb;
-      text-shadow:
-        0 0 10px rgba(255, 135, 205, 0.75),
-        0 1px 3px rgba(0, 0, 0, 0.65);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-align: left;
+
+      /* 3. Visuals & Effects */
+      color: rgba(255, 255, 255, 0.8);
+      text-shadow: -2px 2px 4px rgba(0, 0, 0, 1);
     }
 
-    .sidebar-footer {
+    /* ------ */
+    /* FOOTER */
+    /* ------ */
+    footer {
       margin-top: auto;
-      z-index: 2;
-      font-size: 11px;
-      letter-spacing: 0.08em;
+      font-size: 8px;
+      letter-spacing: 0.2em;
+      font-family: 'Orbitron', sans-serif;
       text-transform: uppercase;
-      color: #ffe8f6;
-      text-shadow:
-        0 0 10px rgba(255, 135, 205, 0.8),
-        0 1px 3px rgba(0, 0, 0, 0.7);
+      color: #ffffff;
     }
   </style>
 
@@ -222,33 +225,27 @@
 <body>
   <div id="particles"></div>
 
-  <header class="sidebar-header">
-    <h1><span class="e">e</span><span class="ternity">tERNity</span></h1>
+  <header>
+    <h1><span class="title-initial">e</span><span class="title-rest">tERNity</span></h1>
   </header>
 
   <main>
 
-    <div class="sidebar-buttons">
+    <div class="action">
+      <button id="update-tracker">Update tracker</button>
+      <p class="action-desc">Genshin Impact v<?= gameVersion ?> achievements are available!</p>
+    </div>
 
-      <div class="sidebar-action">
-        <button id="update-tracker">Update tracker</button>
-        <p>Genshin Impact v
-          <?= gameVersion ?> achievements are available!
-        </p>
-      </div>
-
-      <div class="sidebar-action">
-        <button id="import-progress">Import progress</button>
-        <p>Transfer your achievement progress from your old Wonders of the World checklist.</p>
-      </div>
-
+    <div class="action">
+      <button id="import-progress">Import progress</button>
+      <p class="action-desc">Transfer achievement progress from your old Wonders of the World checklist.</p>
     </div>
 
   </main>
 
-  <footer class="sidebar-footer">
-    Version
-    <?= bundleVersion ?>
+  <footer>
+    <small>Version <?= bundleVersion ?>
+    </small>
   </footer>
 
   <script>
