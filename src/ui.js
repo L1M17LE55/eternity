@@ -5,7 +5,7 @@ import modal from './html/modal.html'
 export function showSidebar() {
   const template = HtmlService.createTemplate(sidebar)
   template.bundleVersion = metadata.bundleVersion
-  template.gameVersion = metadata.gameVersion
+  template.trackerVersion = metadata.trackerVersion
 
   const html = template.evaluate().setTitle('\u200B')
   SpreadsheetApp.getUi().showSidebar(html)
