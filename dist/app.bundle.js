@@ -347,9 +347,9 @@ var App = (() => {
       padding: 24px 16px;
       background-image:
         linear-gradient(to bottom,
-          rgba(10, 14, 24, 0.65) 0%,
-          rgba(10, 14, 24, 0.45) 30%,
-          rgba(10, 14, 24, 0) 60%),
+          rgba(10, 14, 24, 0.5) 0%,
+          rgba(10, 14, 24, 0.3) 50%,
+          rgba(10, 14, 24, 0) 75%),
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
       background-size: cover;
       background-position: center bottom;
