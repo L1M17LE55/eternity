@@ -568,7 +568,7 @@ var App = (() => {
     <div class="action">
       <button id="update-tracker">Update tracker</button>
       <p class="action-desc">Click "Update tracker" to get the latest changes from the template.<br>
-      Current template version: <?= templateVersion ?></p>
+      Current template version: <?= trackerVersion ?></p>
     </div>
     </div>
 
