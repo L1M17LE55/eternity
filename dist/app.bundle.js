@@ -346,6 +346,10 @@ var App = (() => {
       flex-direction: column;
       padding: 24px 16px;
       background-image:
+        linear-gradient(to bottom,
+          rgba(10, 14, 24, 0.65) 0%,
+          rgba(10, 14, 24, 0.45) 30%,
+          rgba(10, 14, 24, 0) 60%),
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/sidebar-background.webp');
       background-size: cover;
       background-position: center bottom;
@@ -357,6 +361,7 @@ var App = (() => {
     /* ------ */
     header h1 {
       display: flex;
+      justify-content: center;
       align-items: center;
       font-weight: 400;
       letter-spacing: 0.28em;
@@ -392,7 +397,7 @@ var App = (() => {
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      width: auto;
+      width: 60%;
       margin: 0 auto;
       padding: 4px 0 0 0;
       border: none;
@@ -413,7 +418,7 @@ var App = (() => {
 
     .action button::after {
       content: "";
-      width: 175px;
+      width: 100%;
       height: 2px;
       transform: scaleY(0.5);
       background: rgba(255, 255, 255, 0.75);
@@ -428,7 +433,7 @@ var App = (() => {
     }
 
     .action button:hover::after {
-      width: 225px;
+      width: 135%;
     }
 
     .action button:disabled {
@@ -438,7 +443,7 @@ var App = (() => {
     }
 
     .action button:disabled::after {
-      width: 150px;
+      width: 75%;
       background: rgba(255, 255, 255, 0.25);
       box-shadow: none;
     }
@@ -462,6 +467,7 @@ var App = (() => {
     /* ------ */
     footer {
       margin-top: auto;
+      text-align: center;
       font-size: 8px;
       letter-spacing: 0.2em;
       font-family: 'Orbitron', sans-serif;
