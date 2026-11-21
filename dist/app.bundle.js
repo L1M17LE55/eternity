@@ -415,18 +415,24 @@ var App = (() => {
       content: "";
       width: 100%;
       height: 2px;
-      background: rgba(255, 255, 255, 0.75);
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.85) 50%,
+        rgba(255, 255, 255, 0.15) 100%
+      );
       box-shadow: 0 0 6px rgba(255, 255, 255, 1);
-      mask-image: linear-gradient(to right,
-          transparent 0%,
-          black 20%,
-          black 80%,
-          transparent 100%);
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 20%,
+        black 80%,
+        transparent 100%
+      );
       mask-size: 160% 100%;
       mask-position: center;
       mask-repeat: no-repeat;
       transition: 0.25s ease;
-      transform: scaleY(0.5);
     }
 
     .action button:not(:disabled):hover {
@@ -457,11 +463,13 @@ var App = (() => {
       padding: 8px 20px;
       background: rgba(0, 0, 0, 0.1);
       backdrop-filter: blur(4px);
-      mask-image: linear-gradient(to right,
-          transparent 0%,
-          black 10%,
-          black 90%,
-          transparent 100%);
+      mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        black 10%,
+        black 90%,
+        transparent 100%
+      );
       font-family: 'Zen Kaku Gothic New', sans-serif;
       font-size: 12px;
       font-weight: 400;
@@ -717,6 +725,7 @@ var App = (() => {
 
     body {
       box-sizing: border-box;
+      padding-bottom: 48px;
       background-image:
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/modal-background.webp');
       background-size: cover;
