@@ -15,8 +15,8 @@ export function showModal(method, ...args) {
   const template = HtmlService.createTemplate(modal)
   template.payload = JSON.stringify({ method, args })
   const html = template.evaluate()
-    .setWidth(640)
-    .setHeight(480)
+    .setWidth(560)
+    .setHeight(350)
   SpreadsheetApp.getUi().showModalDialog(html, '\u200B')
 }
 
