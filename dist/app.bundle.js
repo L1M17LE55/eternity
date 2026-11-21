@@ -318,8 +318,10 @@ var App = (() => {
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
   <title>Eternity Sidebar</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -557,6 +559,7 @@ var App = (() => {
 </head>
 
 <body>
+
   <div id="particles"></div>
 
   <header>
@@ -566,25 +569,35 @@ var App = (() => {
   <main>
 
     <div class="action">
+
       <button id="update-tracker">Update tracker</button>
-      <p class="action-desc">Click "Update tracker" to get the latest changes from the template.<br>
-      Current template version: <?= trackerVersion ?></p>
-    </div>
+
+      <p class="action-desc">
+        Click "Update tracker" to get the latest changes from the template.<br>
+        Current template version: <?= trackerVersion ?>
+      </p>
+
     </div>
 
     <div class="action">
+
       <button id="import-progress">Import progress</button>
-      <p
-        class="action-desc">Click "Import progress" to transfer your achievement progress from an old Wonders of the World checklist.</p>
+
+      <p class="action-desc">
+        Click "Import progress" to transfer your achievement progress from an old Wonders of the World checklist.
+      </p>
+
     </div>
 
   </main>
 
   <footer>
+
     <small>
       Version <?= bundleVersion ?><br>
       by L1M17LE55
     </small>
+
   </footer>
 
   <script>
@@ -686,17 +699,32 @@ var App = (() => {
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+
   <title>Eternity Modal</title>
+
+  <style>
+    body {
+      min-height: 100vh;
+      background-image: url('../../assets/modal-background.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  </style>
+
 </head>
 
 <body>
+
   <div id="method-data" data-payload="<?= payload ?>"></div>
+
   <p id="result">Loading...</p>
 
   <script>
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
+
     google.script.run
       .withSuccessHandler((result) => {
         document.getElementById('result').textContent
