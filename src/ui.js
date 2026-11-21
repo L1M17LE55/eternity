@@ -15,7 +15,9 @@ export function showModal(method, ...args) {
   const template = HtmlService.createTemplate(modal)
   template.payload = JSON.stringify({ method, args })
   const html = template.evaluate()
-  SpreadsheetApp.getUi().showModalDialog(html, 'Eternity')
+    .setWidth(700)
+    .setHeight(450)
+  SpreadsheetApp.getUi().showModalDialog(html)
 }
 
 export function showImportPrompt() {
