@@ -717,7 +717,6 @@ var App = (() => {
 
     body {
       box-sizing: border-box;
-      padding-bottom: 48px;
       background-image:
         url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/modal-background.webp');
       background-size: cover;
