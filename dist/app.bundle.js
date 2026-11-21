@@ -778,7 +778,7 @@ if (oldTrackerId === currentTracker.getId()) {
   function showModal(method, ...args) {
     const template = HtmlService.createTemplate(modal_default);
     template.payload = JSON.stringify({ method, args });
-    const html = template.evaluate().setWidth(640).setHeight(480);
+    const html = template.evaluate().setWidth(560).setHeight(350);
     SpreadsheetApp.getUi().showModalDialog(html, "\u200B");
   }
   function showImportPrompt() {
