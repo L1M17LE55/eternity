@@ -17,7 +17,7 @@ export function showModal(method, ...args) {
   const html = template.evaluate()
     .setWidth(700)
     .setHeight(450)
-  SpreadsheetApp.getUi().showModalDialog(html)
+  SpreadsheetApp.getUi().showModalDialog(html, '\u200B')
 }
 
 export function showImportPrompt() {
