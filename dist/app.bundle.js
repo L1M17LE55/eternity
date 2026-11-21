@@ -647,15 +647,6 @@ var App = (() => {
   </script>
 
   <script>
-    const currentVersion = document.getElementById('current-version');
-    const availableVersion = document.getElementById('available-version');
-
-    if (availableVersion.textContent.trim() > currentVersion.textContent.trim()) {
-      availableVersion.classList.add('version-newer');
-    }
-  </script>
-
-  <script>
     const container = document.getElementById('particles')
     const petalCount = 9
 
