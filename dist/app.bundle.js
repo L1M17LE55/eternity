@@ -723,6 +723,8 @@ var App = (() => {
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      background-clip: content-box;
+      background-origin: content-box;
     }
   </style>
 
