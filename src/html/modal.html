@@ -2,17 +2,32 @@
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons.css">
+
   <title>Eternity Modal</title>
+
+  <style>
+    body {
+      min-height: 100vh;
+      background-image: url('../../assets/modal-background.webp');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+  </style>
+
 </head>
 
 <body>
+
   <div id="method-data" data-payload="<?= payload ?>"></div>
+
   <p id="result">Loading...</p>
 
   <script>
     const { method, args } = JSON.parse(document.getElementById('method-data').dataset.payload)
+
     google.script.run
       .withSuccessHandler((result) => {
         document.getElementById('result').textContent
