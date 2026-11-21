@@ -707,7 +707,8 @@ var App = (() => {
   <style>
     body {
       min-height: 100vh;
-      background-image: url('../../assets/modal-background.webp');
+      background-image:
+        url('https://raw.githubusercontent.com/L1M17LE55/eternity/refs/heads/dev/assets/modal-background.webp');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
